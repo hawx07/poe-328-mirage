@@ -198,38 +198,19 @@
     }
     @media (max-width: 580px) { .hdr-legend { display: none; } }
 
-    /* ── MODAL ──────────────────────────────── */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,.85); z-index: 1000;
-      align-items: center; justify-content: center;
-      padding: 20px;
-      backdrop-filter: blur(4px);
-    }
-    .modal-overlay.open { display: flex; }
-
-    .modal {
+    /* ── CURSOR PANEL ──────────────────────── */
+    #cursor-panel {
+      position: fixed; z-index: 1000;
+      pointer-events: none;
+      width: 370px;
       background: linear-gradient(160deg, #1c1208 0%, #0d0905 100%);
       border: 1px solid var(--gold-dark);
       border-radius: 6px;
-      max-width: 680px; width: 100%;
-      max-height: 85vh; overflow-y: auto;
-      box-shadow: 0 0 60px rgba(0,0,0,.9), 0 0 0 1px rgba(200,160,40,.15);
-      position: relative;
-      animation: modalIn .18s ease;
+      box-shadow: 0 8px 40px rgba(0,0,0,.92), 0 0 0 1px rgba(200,160,40,.12);
+      animation: panelIn .14s ease;
+      max-height: 80vh; overflow-y: auto;
     }
-    @keyframes modalIn { from { opacity:0; transform:scale(.96) translateY(10px); } to { opacity:1; transform:none; } }
-
-    .modal-close {
-      position: sticky; top: 0; float: right;
-      background: rgba(0,0,0,.7); border: 1px solid var(--gold-dark);
-      color: var(--gold); font-size: 1.1rem; cursor: pointer;
-      width: 36px; height: 36px; border-radius: 3px;
-      display: flex; align-items: center; justify-content: center;
-      margin: 12px 12px 0 0; z-index: 10; flex-shrink: 0;
-      transition: all .15s;
-    }
-    .modal-close:hover { background: rgba(180,130,30,.2); color: var(--gold-light); }
+    @keyframes panelIn { from { opacity:0; transform:scale(.97) translateY(6px); } to { opacity:1; transform:none; } }
 
     .modal-head {
       display: flex; align-items: center; gap: 18px;
@@ -441,6 +422,78 @@
       .builds-grid { grid-template-columns: 1fr; }
       .bprosconsrow { grid-template-columns: 1fr; }
     }
+
+    /* ── PANEL BACKDROP (mobile) ─────────────── */
+    #panel-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.6);
+      z-index: 999;
+    }
+
+    /* ── PANEL CLOSE BTN (mobile only) ───────── */
+    #panel-close {
+      display: none;
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(0,0,0,.6); border: 1px solid var(--gold-dark);
+      color: var(--gold); font-size: 1rem; cursor: pointer;
+      width: 32px; height: 32px; border-radius: 3px;
+      align-items: center; justify-content: center;
+      z-index: 10; flex-shrink: 0; transition: all .15s;
+    }
+    #panel-close:hover { background: rgba(180,130,30,.2); color: var(--gold-light); }
+
+    /* ── PANEL SCROLLBAR ─────────────────────── */
+    #cursor-panel::-webkit-scrollbar { width: 4px; }
+    #cursor-panel::-webkit-scrollbar-track { background: transparent; }
+    #cursor-panel::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 2px; }
+
+    /* ── ICON TOUCH TARGETS ──────────────────── */
+    .item { -webkit-tap-highlight-color: transparent; user-select: none; }
+
+    /* ── MOBILE BOTTOM SHEET ─────────────────── */
+    @media (hover: none) and (pointer: coarse) {
+      #cursor-panel {
+        position: fixed !important;
+        bottom: 0 !important; top: auto !important;
+        left: 0 !important; right: 0 !important;
+        width: 100% !important;
+        max-height: 75vh;
+        border-radius: 12px 12px 0 0;
+        border-bottom: none;
+        pointer-events: auto;
+        animation: slideUp .22s ease;
+      }
+      #panel-close { display: flex; }
+      .modal-head { padding: 16px 48px 14px 16px; }
+      .modal-icon { width: 56px; height: 56px; }
+      .modal-icon img { width: 46px; height: 46px; }
+      .modal-name { font-size: 1.1rem; }
+    }
+    @keyframes slideUp { from { transform: translateY(100%); opacity:.5; } to { transform: translateY(0); opacity:1; } }
+
+    /* ── SMALL SCREEN HEADER ─────────────────── */
+    @media (max-width: 480px) {
+      .hdr { padding: 8px 14px; gap: 8px; }
+      .hdr-title h1 { font-size: 1.1rem; letter-spacing: 1px; }
+      .hdr-title p { font-size: .58rem; letter-spacing: 2px; }
+      .hdr-logo { width: 48px; height: 48px; }
+      .hdr-logo img { width: 42px; height: 42px; }
+      .hdr-credits { display: none; }
+      .main { padding: 14px 12px 0; }
+      .sec-title { font-size: .9rem; letter-spacing: 2px; }
+      .item { width: 70px; }
+      .item-wrap { width: 62px; height: 62px; }
+      .frame { width: 62px; height: 62px; }
+      .frame img { width: 50px; height: 50px; }
+      .lbl { font-size: .52rem; }
+      .gen .item { width: 86px; }
+      .gen .item-wrap { width: 72px; height: 72px; }
+      .gen .frame { width: 72px; height: 72px; }
+      .gen .frame img { width: 58px; height: 58px; }
+      .builds-section { padding: 20px 12px 40px; }
+      .builds-title { font-size: 1.05rem !important; letter-spacing: 2px !important; }
+      .bprosconsrow { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -502,21 +555,9 @@
   </div>
 </div>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
-  <div class="modal" id="modal">
-    <button class="modal-close" onclick="closeModalDirect()">✕</button>
-    <div class="modal-head">
-      <div class="modal-icon"><img id="modal-img" src="" alt="" /></div>
-      <div class="modal-head-text">
-        <div id="modal-badge" class="modal-badge"></div>
-        <div id="modal-name" class="modal-name"></div>
-        <div id="modal-section" class="modal-section-label"></div>
-      </div>
-    </div>
-    <div class="modal-body" id="modal-body"></div>
-  </div>
-</div>
+<!-- CURSOR PANEL -->
+<div id="cursor-panel" style="display:none"></div>
+<div id="panel-backdrop" style="display:none"></div>
 
 <!-- BUILDS SECTION -->
 <div class="builds-section">
@@ -692,7 +733,7 @@ const gems = [
   { name:'CONSECRATED\nPATH',     t:T.buff, img:IMG.consPath,     tip:'Damage effectiveness boosted. Quality now provides more damage to closer targets.' },
   { name:'DOMINATING\nBLOW',      t:T.buff, img:IMG.domBlow,      tip:'Now also summons sentinels when you kill rare enemies. Duration extended.' },
   { name:'HOLY FLAME\nTOTEM',     t:T.buff, img:IMG.holyFlame,    tip:'Now fires 3–6 projectiles based on gem level (was always 3). Significant DPS increase.' },
-  { name:'PENANCE\nBRAND',        t:T.buff, img:IMG.penBrand,     tip:'10% more damage. Effectiveness of added damage raised to 520–630% (was 470–570%).' },
+  { name:'PENANCE\nBRAND',        t:T.buff, img:IMG.penBrand,     tip:'10% more damage. Effectiveness 520–630% (was 470–570%). No longer has 30% less Ailment Damage.' },
   { name:'PURIFYING\nFLAME',      t:T.buff, img:IMG.purFlame,     tip:'Mana cost reduced. Shockwave now deals 150% more damage (was 110%).' },
   { name:'RAISE\nSPECTRE',        t:T.buff, img:IMG.raiseSpec,    tip:'Improved scaling at gem levels past 20. Better late-game minion build viability.' },
   { name:'STORM\nBRAND',          t:T.buff, img:IMG.stormBrand,   tip:'Massive damage increase: effectiveness raised from ~30% to 45–55%.' },
@@ -703,8 +744,8 @@ const gems = [
   { name:'PENANCE BRAND\nOF DISSIPATION', t:T.nerf, img:IMG.penDissip,    tip:'Significant damage nerf to compensate for the regular Penance Brand buff. Reduced effectiveness.' },
   { name:'DETONATE DEAD\nOF SCAVENGING',  t:T.nerf, img:IMG.detDead,      tip:'70% less ailment damage (was 60%). Ailment ignite builds hit hard.' },
   { name:'EARTH-\nSHATTER',               t:T.nerf, img:IMG.earthshatter, tip:'Effectiveness of Added Damage reduced from 393% to 329% at gem level 20.' },
-  { name:'STATIC\nSTRIKE',                t:T.nerf, img:IMG.staticStrike, tip:'Beam damage reduced. Adjusted downward from previous values.' },
-  { name:'VIPER STRIKE\nOF MAMBA',        t:T.nerf, img:IMG.viperStrike,  tip:'Attack speed penalty applied when dual wielding. Reduces dual-wield synergy.' },
+  { name:'STATIC\nSTRIKE',                t:T.buff, img:IMG.staticStrike, tip:'Beams: 40% less → 30% less damage (net buff). Zap range 2→2.5m. Duration 3s→4s. Significant improvement across the board.' },
+  { name:'VIPER STRIKE\nOF MAMBA',        t:T.nerf, img:IMG.viperStrike,  tip:'30% less attack speed dual wielding. Each weapon hits separately (20% less damage each). Cannot inflict multiple poisons per hit. Major nerf to dual-wield setups.' },
 
   /* ── CHANGES ── */
   { name:'ORB OF\nSTORMS', t:T.chg, img:IMG.orbStorms,   tip:'Now supports Spell Echo. Enables new support gem interactions with orb skills.' },
@@ -730,7 +771,7 @@ const general = [
   { name:'RELIQUARIAN\nNEW ASCEND.', t:T.new,  img:IMG.scion,       tip:'New Scion-exclusive ascendancy: Reliquarian. Borrows powerful modifiers that already exist on unique items. The pool of options rotates each league.' },
   { name:'ATLAS\nREWORK',            t:T.chg,  img:IMG.dominOrb,    tip:'Maps fully decoupled from areas — players now select layouts via Map Device separately. New Arcane Astrolabes create zone-wide modifiers. 25 maps added, 24 removed from pool.' },
   { name:'NIGHTMARE\nMAPS',          t:T.new,  img:gemSvg('new','NM'), tip:'Tier 17 maps become Nightmare Maps. Three new memory threads: Loneliness, Trauma, Reverence. Each completed Nightmare map grants 1 Atlas skill point.' },
-  { name:'HARBINGER\nREMOVED',       t:T.chg,  img:IMG.harbOrb,     tip:'Harbinger removed as core mechanic. Fracturing & Ancient Orbs remain as core drops. Harbinger Orbs become non-functional. Harbinger Scarabs convert to Veiled Scarabs.' },
+  { name:'HARBINGER\nREMOVED',       t:T.chg,  img:IMG.harbOrb,     tip:'Harbinger removed as core mechanic. Harbinger\'s Orbs, Engineer\'s Orbs, and Orbs of Horizons can no longer drop. Harbinger Scarabs removed. Maps with Harbinger implicit now spawn Tormented Spirits instead.' },
   { name:'KEEPERS OF\nFLAME CORE',   t:T.chg,  img:IMG.engOrb,      tip:'Keepers of the Flame goes permanently core. Breach Hives spawn from Act 6 onwards. Flesh of Xesht currency converts breach uniques. New atlas keystones added.' },
   { name:'GENESIS TREE\nNERF',       t:T.nerf, img:IMG.orbFusing,   tip:'Genesis Tree will no longer reliably generate extremely good gear. Significant nerf to the Keepers of the Flame gear generation loop.' },
   { name:'HOLY GEM\nSYSTEM',         t:T.new,  img:IMG.holySweep,   tip:'Entirely new Holy skill category: Holy Hammers, Holy Strike, Divine Blast, Shield of Light, Holy Sweep. New Templar class starting skills.' },
@@ -1141,6 +1182,7 @@ const fullNotes = {
         rows: [
           ['More Damage multiplier', 'Base', '+10% more Damage'],
           ['Effectiveness of Added Damage', '470–570%', '520–630%'],
+          ['Ailment Damage penalty', '30% less Damage with Ailments', 'Removed — no longer has this penalty'],
         ]
       }},
       { title: 'Context', body: 'The Penance Brand of Dissipation transfigured variant was nerfed heavily in this patch (it was the dominant variant). The base Penance Brand was buffed to ensure it remains a competitive option for players who don\'t need the specific Dissipation playstyle.' },
@@ -1185,11 +1227,12 @@ const fullNotes = {
         headers: ['Stat', 'Before 3.28', 'After 3.28'],
         rows: [
           ['Effectiveness of Added Damage', '~30%', '45–55%'],
-          ['More Damage against Branded enemy', '0 (did not exist)', '80% more Damage with Hits against Branded Enemy'],
+          ['More Damage against Branded enemy', '80–130% (scaled with gem level)', '80% at all levels (standardised; nerf at high gem level)'],
+          ['Base Lightning Damage (Lvl 20)', '92–277', '150–449'],
         ]
       }},
-      { title: 'Combined Effect', body: 'The 80% more damage against branded enemies applies whenever the brand is actively attached — which is almost always in practice. Combined with the increased effectiveness of added damage, Storm Brand\'s total damage output has roughly doubled compared to 3.27.' },
-      { title: 'Assassin Synergy', body: 'Assassin\'s Opportunistic now grants full "Damage Cannot be Reflected" — removing Storm Brand\'s historical death condition of Elemental Reflect. With this and the 80% damage buff, Storm Brand Assassin is the single biggest 3.28 sleeper build.' },
+      { title: 'Combined Effect', body: 'The Effectiveness of Added Damage increase (~30% → 45–55%) is the primary buff and the main driver of Storm Brand\'s damage jump in 3.28. The "more Damage against Branded enemy" stat was re-standardised to flat 80% at all levels — this is actually a nerf at gem level 20 (was 130%), but a quality-of-life normalisation. The base damage range was also substantially raised. Net result: Storm Brand is significantly stronger than 3.27, especially with added damage supports.' },
+      { title: 'Assassin Synergy', body: 'Assassin\'s Opportunistic now grants full "Damage Cannot be Reflected" — removing Storm Brand\'s historical death condition of Elemental Reflect. With this and the large Effectiveness buff, Storm Brand Assassin is the single biggest 3.28 sleeper build.' },
     ]
   },
 
@@ -1262,30 +1305,35 @@ const fullNotes = {
   },
 
   'STATIC\nSTRIKE': {
-    section: 'Gem Changes — Nerfed',
-    summary: 'Static Strike\'s beam damage was adjusted downward.',
+    section: 'Gem Changes — Buffed',
+    summary: 'Static Strike received a net buff in 3.28: beams deal more damage (less penalty), the zap range was increased, and the duration was extended.',
     blocks: [
       { title: 'Changes', table: {
         headers: ['Stat', 'Before 3.28', 'After 3.28'],
         rows: [
-          ['Beam Damage', 'Previous value', '30% less Beam Damage'],
+          ['Beam Damage modifier', '40% less Beam Damage', '30% less Beam Damage (net +17% more beam damage)'],
+          ['Base enemy zap range', '2 metres', '2.5 metres'],
+          ['Base duration', '3 seconds', '4 seconds'],
         ]
       }},
-      { title: 'Note on Transfigured Variant', body: 'Static Strike of Gathering Lightning is a new transfigured variant added in 3.28. If you want to continue playing Static Strike builds, the new variant may compensate for the nerf to the base skill with different mechanics.' },
+      { title: 'Why This Is a Buff', body: 'Going from "40% less" to "30% less" means beams now deal 70% of base damage instead of 60% — that is roughly 17% more beam damage. Combined with the larger range and longer duration, Static Strike is meaningfully stronger in 3.28 overall.' },
+      { title: 'New Transfigured Variant', body: 'Static Strike of Gathering Lightning is a brand new transfigured variant added in 3.28 with different mechanics for additional playstyle options.' },
     ]
   },
 
   'VIPER STRIKE\nOF MAMBA': {
     section: 'Gem Changes — Nerfed',
-    summary: 'Viper Strike of the Mamba now applies an attack speed penalty when dual wielding.',
+    summary: 'Viper Strike of the Mamba received multiple significant nerfs targeting its dominant dual-wield poison stacking playstyle.',
     blocks: [
       { title: 'Changes', table: {
         headers: ['Stat', 'Before 3.28', 'After 3.28'],
         rows: [
-          ['Dual wield penalty', 'None', 'Attack speed penalty when dual wielding'],
+          ['Dual wield attack speed', 'No penalty', '30% less Attack Speed when Dual Wielding'],
+          ['Dual wield hit behaviour', 'Both weapons hit together (combined damage)', 'Each weapon hits separately, dealing 20% less Damage each'],
+          ['Poison per hit', 'Could inflict multiple Poisons in the same Hit', 'Cannot inflict multiple Poisons in the same Hit'],
         ]
       }},
-      { title: 'Impact', body: 'Dual wield Viper Strike of the Mamba was a common setup for stacking poison via fast attack speed with two weapons. The attack speed penalty directly reduces the rate of poison application, nerfing the build\'s primary scaling mechanism. Single-weapon configurations are less affected.' },
+      { title: 'Impact', body: 'These three nerfs compound each other severely. Previously, dual wielding let you land fast combined hits and stack multiple poisons per hit. Now: slower attack speed, each weapon hits independently for less damage, AND only one poison per hit. The dual-wield poison stacking playstyle that made this variant popular is effectively dismantled. Single-weapon configurations are less impacted but still lose the poison-per-hit restriction.' },
     ]
   },
 
@@ -1467,24 +1515,22 @@ const fullNotes = {
 
   'HARBINGER\nREMOVED': {
     section: 'General Changes — League Removal',
-    summary: 'Harbinger has been removed as a core mechanic. Its currency remains but the mechanic itself is gone, along with its atlas passives and unique items.',
+    summary: 'Harbinger has been removed as a core mechanic. Harbinger encounters, all four Harbinger Scarab types, and the associated Orb currencies can no longer drop.',
     blocks: [
       { title: 'What Was Removed', items: [
         'Harbinger encounters no longer appear in maps',
-        "Harbinger's Orbs, Engineer's Orbs, and Horizon Orbs are non-functional",
-        'All Harbinger shards removed from drop pools',
-        'All Harbinger-specific Divination Cards removed',
-        'All Harbinger-specific Unique Fragment items removed',
-        '8 Harbinger unique items removed from the game',
-        'All Harbinger Atlas passives removed',
+        "Harbinger's Orbs, Engineer's Orbs, and Orbs of Horizons can no longer be obtained",
+        'All four Harbinger Scarab types can no longer drop (Harbinger, Obelisks, Regency, Warhoards)',
+        'All Harbinger Atlas Passives removed',
+        'Maps that had Harbinger implicit modifiers now spawn Tormented Spirits instead',
       ]},
       { title: 'What Remains', items: [
         'Fracturing Orbs remain as core drops',
         'Ancient Orbs remain as core drops',
-        '6 Harbinger uniques moved to core drop pool: Immortal Will, Shattered Divinity, The Highwayman, The Nomad, The Rippling Thoughts, The Signal Fire',
-        'Harbinger Scarabs convert to Veiled Scarabs when found in stash',
+        '6 Harbinger unique items moved to core drop pool: Immortal Will, Shattered Divinity, The Highwayman, The Nomad, The Rippling Thoughts, The Signal Fire',
+        'Harrowing Carapaces Atlas Notable now grants 100% increased chance for Divination Scarabs (replacing the old Harbinger Scarab chance)',
       ]},
-      { title: 'Context', body: 'Harbinger was one of the original core mechanics. Its removal follows the precedent of Synthesis (2019), Incursion Planner, and other mechanics that GGG rotated out. The Harbinger currency (Orbs) will still be obtainable through other means.' },
+      { title: 'Context', body: 'Harbinger was introduced in 3.0. Its removal from core follows GGG\'s pattern of rotating out older league mechanics. Fracturing Orbs and Ancient Orbs (the most economy-relevant Harbinger currency) were retained as core drops.' },
     ]
   },
 
@@ -1657,74 +1703,105 @@ const fullNotes = {
 };
 
 /* ════════════════════════════════════════════
-   MODAL LOGIC
+   CURSOR PANEL LOGIC
 ════════════════════════════════════════════ */
-function buildModalBody(note) {
+const _cp = document.getElementById('cursor-panel');
+const _backdrop = document.getElementById('panel-backdrop');
+const _isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+function buildPanelBody(note) {
   return note.blocks.map(b => {
     let inner = '';
     if (b.body) inner += `<p>${b.body}</p>`;
     if (b.items) inner += `<ul>${b.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
     if (b.table) {
-      inner += `<table class="pnote-table">
+      inner += `<div style="overflow-x:auto"><table class="pnote-table">
         <thead><tr>${b.table.headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
         <tbody>${b.table.rows.map(r=>`<tr>${r.map((c,i)=>{
           const cls = i>0 ? (r[1] && i===1 ? ' class="old"' : (r[2] && i===2 ? ' class="new-val"' : '')) : '';
           return `<td${cls}>${c}</td>`;
         }).join('')}</tr>`).join('')}</tbody>
-      </table>`;
+      </table></div>`;
     }
-    return `<div class="modal-block">
-      <div class="modal-block-title">${b.title}</div>
-      ${inner}
-    </div>`;
+    return `<div class="modal-block"><div class="modal-block-title">${b.title}</div>${inner}</div>`;
   }).join('<div class="modal-divider"></div>');
 }
 
-function openModal(data, sectionLabel) {
+function showPanel(data, x, y) {
   const note = fullNotes[data.name];
-  if (!note) return; // no full note yet — fallback is the tooltip
-
-  const overlay = document.getElementById('modal-overlay');
+  if (!note) return;
   const t = data.t;
-
-  // head
-  const mImg = document.getElementById('modal-img');
-  mImg.src = data.img;
-  mImg.onerror = function() { this.src = gemSvg(t.cls, data.name); this.onerror=null; };
-  document.getElementById('modal-name').textContent = data.name.replace(/\n/g,' ');
-  const badge = document.getElementById('modal-badge');
-  badge.textContent = t.lbl;
-  badge.className = `modal-badge ${t.cls}`;
-  document.getElementById('modal-section').textContent = note.section || sectionLabel;
-
-  // body
-  document.getElementById('modal-body').innerHTML =
-    `<div class="modal-block"><div class="modal-block-title">Overview</div><p>${note.summary}</p></div>
-     <div class="modal-divider"></div>` +
-    buildModalBody(note);
-
-  overlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  _cp.innerHTML = `
+    <button id="panel-close" onclick="hidePanel()">✕</button>
+    <div class="modal-head">
+      <div class="modal-icon">
+        <img src="${data.img}" alt="" onerror="this.src='${gemSvg(t.cls, data.name)}';this.onerror=null">
+      </div>
+      <div class="modal-head-text">
+        <div class="modal-badge ${t.cls}">${t.lbl}</div>
+        <div class="modal-name">${data.name.replace(/\n/g,' ')}</div>
+        <div class="modal-section-label">${note.section||''}</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-block"><div class="modal-block-title">Overview</div><p>${note.summary}</p></div>
+      <div class="modal-divider"></div>
+      ${buildPanelBody(note)}
+    </div>`;
+  _cp.style.display = 'block';
+  if (_isTouch) {
+    _backdrop.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  } else {
+    positionPanel(x, y);
+  }
 }
 
-function closeModal(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModalDirect();
+function positionPanel(x, y) {
+  const pw = 370;
+  const ph = _cp.offsetHeight;
+  const ww = window.innerWidth;
+  const wh = window.innerHeight;
+  const ox = 18, oy = 14;
+  let left = x + ox;
+  let top  = y + oy;
+  if (left + pw > ww - 8) left = x - pw - ox;
+  if (left < 8)            left = 8;
+  if (top + ph > wh - 8)  top  = y - ph - oy;
+  if (top < 8)             top  = 8;
+  _cp.style.left = left + 'px';
+  _cp.style.top  = top  + 'px';
 }
-function closeModalDirect() {
-  document.getElementById('modal-overlay').classList.remove('open');
+
+function hidePanel() {
+  _cp.style.display = 'none';
+  _backdrop.style.display = 'none';
   document.body.style.overflow = '';
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalDirect(); });
 
-/* ── Patch makeItem to be clickable ── */
+_backdrop.addEventListener('click', hidePanel);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') hidePanel(); });
+
+/* ── Patch makeItem ── */
 const _origMakeItem = makeItem;
 makeItem = function(data, isGen) {
   const el = _origMakeItem(data, isGen);
   const hasNote = !!fullNotes[data.name];
   if (hasNote) {
-    el.style.cursor = 'pointer';
-    el.title = '';           // remove browser tooltip — we have a custom one
-    el.addEventListener('click', () => openModal(data, ''));
+    el.style.cursor = 'default';
+    el.title = '';
+    const tt = el.querySelector('.tt');
+    if (tt) tt.style.display = 'none';
+    if (_isTouch) {
+      el.addEventListener('touchstart', e => {
+        e.preventDefault();
+        showPanel(data, 0, 0);
+      }, { passive: false });
+    } else {
+      el.addEventListener('mouseenter', e => showPanel(data, e.clientX, e.clientY));
+      el.addEventListener('mousemove',  e => positionPanel(e.clientX, e.clientY));
+      el.addEventListener('mouseleave', hidePanel);
+    }
   }
   return el;
 };
@@ -1760,14 +1837,14 @@ const builds = [
     name:'BLEED BOW',
     sub:'Gladiator — Duelist',
     ascImg: 'https://www.poewiki.net/images/1/12/Gladiator_ascendancy_class.png',
-    skillImg: IMG.viperStrike,
+    skillImg: 'https://www.poewiki.net/images/2/23/Puncture_inventory_icon.png',
     skillName:'Split Arrow + Puncture',
     diff:2,
     teaser:'Resolute Technique ensures 100% hit rate — no crit needed, no variance. Double-lucky block makes you nearly immortal. Unaffected by the INT/ES nerf.',
     why:'Completely bypasses the 3.28 INT/ES nerf with a pure life/bleed build. Ensnaring Arrow forces enemies to always "move," multiplying bleed damage. Gladiator\'s Gratuitous Violence proliferates bleeds for screen-clearing power.',
     playstyle:'Map with Split Arrow + chain bleeds via Gratuitous Violence. Boss phases swap to Puncture for stacked bleed. Maintain Ensnaring Arrow on bosses so they always count as moving (3× bleed damage multiplier). Extremely tanky via 87% block with Glancing Blows.',
-    pros:['Zero crit — fully consistent from day one','Best-in-slot defensive layer (87% block)','Reflect immune — Gladiator Gratuitous Violence handles it','Excellent SSF starter, needs no specific uniques','Strong boss DPS through stacked Puncture bleeds'],
-    cons:['Slower mapper than mine/totem builds','Requires Ensnaring Arrow management on bosses','Scales poorly past ~10ex without diminishing returns','Cannot run Elemental Reflect map mod safely'],
+    pros:['Zero crit — fully consistent from day one','Best-in-slot defensive layer (87% block)','Naturally reflect-safe — bleed is an ailment, cannot be reflected','Excellent SSF starter, needs no specific uniques','Strong boss DPS through stacked Puncture bleeds'],
+    cons:['Slower mapper than mine/totem builds','Requires Ensnaring Arrow management on bosses','Scales poorly past ~10ex without diminishing returns','Physical Reflect map mod is dangerous — use Split Arrow + dodge'],
     gemLinks:['Puncture','Brutality','Vicious Projectiles','Deadly Ailments','Swift Affliction','Unbound Ailments'],
     keyItems:['High physical damage bow with elder mods','Haemophilia gloves (bleed DoT multi)','Ryslatha\'s Coil belt','Ensnaring Arrow (utility link)'],
   },
@@ -1797,11 +1874,11 @@ const builds = [
     skillImg: IMG.stormBrand,
     skillName:'Storm Brand',
     diff:3,
-    teaser:'Two MASSIVE overlooked buffs: Storm Brand gained 80% more damage against branded enemies, AND Assassin now has FULL reflect immunity (not just crit strikes). Most players still think this build is dead.',
-    why:'3.28 buffed Storm Brand effectiveness from ~30% to 45–55% — an enormous damage increase. Simultaneously, Assassin\'s Opportunistic now grants "Damage Cannot be Reflected" (previously only critical strike damage was immune). The one historical fatal weakness of Storm Brand Assassin is completely gone.',
+    teaser:'Two MASSIVE overlooked buffs: Storm Brand\'s Effectiveness of Added Damage jumped from ~30% to 45–55%, AND Assassin now has FULL reflect immunity (not just crit strikes). Most players still think this build is dead.',
+    why:'3.28 buffed Storm Brand Effectiveness of Added Damage from ~30% to 45–55% — a near-doubling of damage for add-scaled setups, plus a huge base damage range increase. Simultaneously, Assassin\'s Opportunistic now grants "Damage Cannot be Reflected" (previously only critical strike damage was immune). The one historical fatal weakness of Storm Brand Assassin is completely gone.',
     playstyle:'Attach brands to enemies — each brand repeatedly pulses lightning damage passively while you move. Void Battery x2 provides insane Power Charge–based crit multiplier. Brands persist through Breach and Delirium transitions. Full reflect immunity means zero dangerous map mods.',
     pros:['Two separate 3.28 buffs that almost nobody noticed','Full Elemental Reflect immunity — no more death by reflect','Brands are "set and forget" — attach and keep moving','Delirium/Breach specialist: brands persist through events','Very satisfying passive damage style'],
-    cons:['Void Battery setup costs 100+ chaos each early league','80% buff only applies while brand is actually attached','Boss re-attach required after detach phases','Storm Brand has a bad reputation — most guides are outdated'],
+    cons:['Void Battery setup costs 100+ chaos each early league','Branded enemy bonus only applies while brand is actively attached','Boss re-attach required after detach phases','Storm Brand has a bad reputation — most guides are outdated'],
     gemLinks:['Storm Brand','Awakened Added Lightning Damage','Controlled Destruction','Intensify','Energy Leech','Inspiration'],
     keyItems:['Void Battery x2 (BiS — doubles crit and spell damage)','Badge of the Brotherhood (Power→Frenzy conversion)','Shaper helm with Brands Increased Damage implicit','Watcher\'s Eye (Wrath: lightning penetration)'],
   },
@@ -1858,7 +1935,7 @@ const builds = [
     name:'GLACIAL CASCADE MINER',
     sub:'Elementalist — Witch',
     ascImg: IMG.elementalist,
-    skillImg: IMG.stormBurst,
+    skillImg: IMG.winterOrb,
     skillName:'Glacial Cascade of the Fissure',
     diff:2,
     teaser:'A perpetually reliable build that the 3.28 patch left untouched. Autotargeting fissure chains demolish entire screens. 10M DPS at league start, 100M DPS ceiling with gear.',
