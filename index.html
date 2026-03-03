@@ -1829,7 +1829,7 @@ const builds = [
     playstyle:'Cast Absolution on packs to summon lightning Sentinels. Minions do all the work — you buff them, curse enemies, and reposition with Convocation. Scales effortlessly from acts to Uber bosses. Swap to Doryani\'s Prototype for endgame.',
     pros:['Available from level 12 with no gear requirements','Budget to endgame in the same ascendancy','New permanent Sentinel of Radiance passive companion','Minions are nearly unkillable with the new Guardian nodes','Zero reflect risk (minions deal the damage)'],
     cons:['Minion pathing can be inconsistent in tight spaces','Doryani\'s Prototype swap requires careful resistance management','Less hands-on — some players find it boring'],
-    gemLinks:['Vaal Absolution','Minion Damage','Physical to Lightning','Spell Echo','Critical Strike','Cruelty Support'],
+    gemLinks:['Vaal Absolution','Minion Damage','Physical to Lightning','Spell Echo','Increased Critical Strikes','Cruelty Support'],
     keyItems:['Any +minion damage wand/staff (starter)','Doryani\'s Prototype (endgame)','Glorious Vanity (Xibaqua) for Divine Flesh','Watcher\'s Eye (Hatred/Wrath mods)'],
   },
   {
@@ -1843,8 +1843,8 @@ const builds = [
     teaser:'Resolute Technique ensures 100% hit rate — no crit needed, no variance. Double-lucky block makes you nearly immortal. Unaffected by the INT/ES nerf.',
     why:'Completely bypasses the 3.28 INT/ES nerf with a pure life/bleed build. Ensnaring Arrow forces enemies to always "move," multiplying bleed damage. Gladiator\'s Gratuitous Violence proliferates bleeds for screen-clearing power.',
     playstyle:'Map with Split Arrow + chain bleeds via Gratuitous Violence. Boss phases swap to Puncture for stacked bleed. Maintain Ensnaring Arrow on bosses so they always count as moving (3× bleed damage multiplier). Extremely tanky via 87% block with Glancing Blows.',
-    pros:['Zero crit — fully consistent from day one','Best-in-slot defensive layer (87% block)','Naturally reflect-safe — bleed is an ailment, cannot be reflected','Excellent SSF starter, needs no specific uniques','Strong boss DPS through stacked Puncture bleeds'],
-    cons:['Slower mapper than mine/totem builds','Requires Ensnaring Arrow management on bosses','Scales poorly past ~10ex without diminishing returns','Physical Reflect map mod is dangerous — use Split Arrow + dodge'],
+    pros:['Zero crit — fully consistent from day one','Best-in-slot defensive layer (87% block)','Bleed DoT cannot be reflected — your primary DPS source is inherently safe','Excellent SSF starter, needs no specific uniques','Strong boss DPS through stacked Puncture bleeds'],
+    cons:['Slower mapper than mine/totem builds','Requires Ensnaring Arrow management on bosses','Scales poorly past ~10ex without diminishing returns','Physical Reflect still applies to the initial Puncture hit — use Basalt Flask or skip the mod'],
     gemLinks:['Puncture','Brutality','Vicious Projectiles','Deadly Ailments','Swift Affliction','Unbound Ailments'],
     keyItems:['High physical damage bow with elder mods','Haemophilia gloves (bleed DoT multi)','Ryslatha\'s Coil belt','Ensnaring Arrow (utility link)'],
   },
@@ -1859,10 +1859,10 @@ const builds = [
     teaser:'Brand new 3.28 skill with minimal guide saturation. Cascading holy hammers chain from enemy to enemy. Power Charges create extra hammer flanks for devastating single-target DPS spikes.',
     why:'Entirely new skill means low player saturation. Inquisitor\'s Righteous Providence + Inevitable Judgement provides free penetration against all enemies. The hammer cascade mechanic clears full packs with one slam while Power Charge consumption handles bosses.',
     playstyle:'Slam forward to drop a Holy Hammer. On hit it cascades to adjacent enemies chain-style. Before boss fights, build 3+ Power Charges (via Static Strike), then consume them on Holy Hammers to call extra flanking hammers. Rallying Cry before big hits for warcry damage boost.',
-    pros:['Brand new skill — almost nobody playing it in week 1','Excellent clear AND single-target in one skill','Massive life regen from Inquisitor\'s Sanctuary keystone','Physical→Lightning conversion enables shock proliferation','Satisfying cascade hit-feel'],
+    pros:['Brand new skill — almost nobody playing it in week 1','Excellent clear AND single-target in one skill','Massive life regen from Inquisitor\'s Sanctuary keystone','Free crit multi via Righteous Providence — no crit investment needed','Satisfying cascade hit-feel'],
     cons:['Level with Sunder until maps — Holy Hammers needs Cluster Jewels first','"Fuel the Fight" Large Cluster is mandatory — build fails without it','Animation cancel with Frostblink required for best mapping speed','Intermediate skill floor'],
     gemLinks:['Holy Hammers','Brutality','Melee Physical Damage','Fortify','Close Combat','Pulverise'],
-    keyItems:['"Fuel the Fight" Large Cluster Jewel (mandatory)','Two-handed axe with max phys damage range','Medium Cluster with Mob Mentality','Amulet with Disciple of the Forbidden anoint'],
+    keyItems:['"Fuel the Fight" Large Cluster Jewel (mandatory)','Two-handed mace or staff with max phys damage range','Medium Cluster with Mob Mentality','Amulet with Disciple of the Forbidden anoint'],
   },
 
   /* ───── SLEEPER / OFF-META ───── */
@@ -1912,7 +1912,7 @@ const builds = [
     pros:['Both 3.28 Saboteur buffs directly apply to this build','Ghost Dance + evasion + blind = best mitigation for hits','Budget: Tremor Rod is cheap and doubles boss DPS','Reflect immune inherently','Only 2 truly dangerous map mods (no regen + reduced recovery)'],
     cons:['Not the fastest mapper — no chain-clearing explosions','Manual detonation timing required for optimal boss damage','Incremental not transformative buffs','Already a good build — not a surprise first-week pick'],
     gemLinks:['Pyroclast Mine','Minefield','Swift Assembly','Controlled Destruction','Fire Penetration','Combustion'],
-    keyItems:['Tremor Rod (double detonation chains — mandatory)','Blightwell flask (chaos res + mine damage)','Cluster Jewels: mine throwing speed + Blast Cascade','Mine detonation speed enchant on helmet'],
+    keyItems:['Tremor Rod (double detonation chains — mandatory)','Dying Sun (extra projectiles + increased area — fire mine staple)','Cluster Jewels: mine throwing speed + Blast Cascade','Mine detonation speed enchant on helmet'],
   },
   {
     tag:'🆕 NEW ASCENDANCY', tagCls:'new',
@@ -1940,11 +1940,11 @@ const builds = [
     diff:2,
     teaser:'A perpetually reliable build that the 3.28 patch left untouched. Autotargeting fissure chains demolish entire screens. 10M DPS at league start, 100M DPS ceiling with gear.',
     why:'Glacial Cascade of the Fissure mines autotarget enemies through fissure chains — effectively one-button mapping. Elementalist provides Shaper of Ices (freeze), Shaper of Storms (shock), and passive node damage bonuses. The build wasn\'t nerfed in 3.28 while many ES-stacking alternatives got hit hard.',
-    playstyle:'Throw 3–5 mines and detonate. The fissure chains handle all targeting automatically — packs explode without aiming. Elementalist provides free free elemental ailment scaling. Bosses die to layered mine detonation waves. SSF viable with found gear.',
+    playstyle:'Throw 3–5 mines and detonate. The fissure chains handle all targeting automatically — packs explode without aiming. Elementalist provides free elemental ailment scaling. Bosses die to layered mine detonation waves. SSF viable with found gear.',
     pros:['10M DPS achievable at league start with minimal investment','100M DPS ceiling with proper gear investment','SSF viable from day one — no specific uniques needed','Autotargeting fissure = effortless one-button mapping','Not nerfed in 3.28 while ES alternatives took hits'],
     cons:['Mine playstyle not for everyone — throw/detonate rhythm','No major buffs in 3.28, just maintained strength','Cooldown management required for optimal boss damage','Can feel repetitive over long sessions'],
     gemLinks:['Glacial Cascade of the Fissure','Minefield','Controlled Destruction','Hypothermia','Swift Assembly','Added Cold Damage'],
-    keyItems:['Tremor Rod (double mine detonation — huge boss DPS)','Heatshiver (early: cold→fire for resist coverage)','Void Battery wands (endgame crit scaling)','Cluster Jewels: mine throwing speed + damage'],
+    keyItems:['Tremor Rod (double mine detonation — huge boss DPS)','Heatshiver (adds extra fire damage from cold hits — great with Frozen Enemies bonus)','Void Battery wands (endgame crit scaling)','Cluster Jewels: mine throwing speed + damage'],
   },
 ];
 
