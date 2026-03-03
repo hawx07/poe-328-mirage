@@ -198,6 +198,113 @@
     }
     @media (max-width: 580px) { .hdr-legend { display: none; } }
 
+    /* ── MODAL ──────────────────────────────── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.85); z-index: 1000;
+      align-items: center; justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: linear-gradient(160deg, #1c1208 0%, #0d0905 100%);
+      border: 1px solid var(--gold-dark);
+      border-radius: 6px;
+      max-width: 680px; width: 100%;
+      max-height: 85vh; overflow-y: auto;
+      box-shadow: 0 0 60px rgba(0,0,0,.9), 0 0 0 1px rgba(200,160,40,.15);
+      position: relative;
+      animation: modalIn .18s ease;
+    }
+    @keyframes modalIn { from { opacity:0; transform:scale(.96) translateY(10px); } to { opacity:1; transform:none; } }
+
+    .modal-close {
+      position: sticky; top: 0; float: right;
+      background: rgba(0,0,0,.7); border: 1px solid var(--gold-dark);
+      color: var(--gold); font-size: 1.1rem; cursor: pointer;
+      width: 36px; height: 36px; border-radius: 3px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 12px 12px 0 0; z-index: 10; flex-shrink: 0;
+      transition: all .15s;
+    }
+    .modal-close:hover { background: rgba(180,130,30,.2); color: var(--gold-light); }
+
+    .modal-head {
+      display: flex; align-items: center; gap: 18px;
+      padding: 24px 24px 16px;
+      border-bottom: 1px solid var(--gold-dark);
+    }
+    .modal-icon {
+      width: 80px; height: 80px; flex-shrink: 0; border-radius: 50%;
+      background: radial-gradient(circle at 42% 38%, #4a3018 0%, #1c1006 55%, #0a0704 100%);
+      box-shadow:
+        0 0 0 1.5px var(--gold-mid),
+        0 0 0 3px #1a1006,
+        0 0 0 5px var(--gold-dark),
+        0 0 20px rgba(180,130,30,.3);
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+    }
+    .modal-icon img { width: 66px; height: 66px; object-fit: contain; }
+    .modal-head-text { flex: 1; }
+    .modal-badge {
+      display: inline-block; font-size: .6rem; font-weight: 700;
+      font-family: 'Cinzel',Georgia,serif; letter-spacing: 1.5px;
+      padding: 3px 10px; border: 1px solid; border-radius: 2px; margin-bottom: 8px;
+    }
+    .modal-badge.buff   { color: var(--buff);   border-color: var(--buff); }
+    .modal-badge.nerf   { color: var(--nerf);   border-color: var(--nerf); }
+    .modal-badge.change { color: var(--change); border-color: var(--change); }
+    .modal-badge.new    { color: var(--new);    border-color: var(--new); }
+    .modal-name {
+      font-size: 1.4rem; font-weight: 700; color: var(--gold-light);
+      letter-spacing: 2px; text-transform: uppercase; line-height: 1.2;
+    }
+    .modal-section-label {
+      font-size: .6rem; color: var(--textdim); letter-spacing: 3px;
+      text-transform: uppercase; margin-top: 4px;
+    }
+
+    .modal-body { padding: 20px 24px 28px; display: flex; flex-direction: column; gap: 18px; }
+
+    .modal-block { display: flex; flex-direction: column; gap: 8px; }
+    .modal-block-title {
+      font-size: .65rem; font-weight: 700; color: var(--gold);
+      letter-spacing: 2px; text-transform: uppercase;
+      padding-bottom: 6px; border-bottom: 1px solid rgba(100,70,20,.4);
+    }
+    .modal-block p {
+      font-size: .8rem; line-height: 1.65; color: var(--text); font-family: Georgia,serif;
+    }
+    .modal-block ul { list-style: none; display: flex; flex-direction: column; gap: 4px; padding: 0; }
+    .modal-block ul li {
+      font-size: .78rem; line-height: 1.5; color: var(--text);
+      font-family: Georgia,serif; padding-left: 14px; position: relative;
+    }
+    .modal-block ul li::before { content: '›'; position: absolute; left: 0; color: var(--gold); }
+
+    /* before/after comparison table */
+    .pnote-table { width: 100%; border-collapse: collapse; font-family: Georgia,serif; font-size: .76rem; }
+    .pnote-table th {
+      background: rgba(100,70,20,.25); color: var(--gold);
+      font-family: 'Cinzel',Georgia,serif; font-size: .6rem; letter-spacing: 1.5px;
+      padding: 6px 12px; text-align: left; font-weight: 700;
+      border: 1px solid rgba(100,70,20,.3);
+    }
+    .pnote-table td {
+      padding: 7px 12px; border: 1px solid rgba(100,70,20,.25);
+      color: var(--text); vertical-align: top; line-height: 1.45;
+    }
+    .pnote-table tr:nth-child(even) td { background: rgba(0,0,0,.15); }
+    .pnote-table .old { color: #e84040; }
+    .pnote-table .new-val { color: #3dd64a; }
+
+    .modal-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--gold-dark), transparent); }
+
+    /* item cursor change */
+    .item { cursor: pointer; }
+
     /* ════════════════════════════════════════
        BUILDS SECTION
     ════════════════════════════════════════ */
@@ -392,6 +499,22 @@
       </div>
       <div class="items-grid gen" id="gen-grid"></div>
     </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    <div class="modal-head">
+      <div class="modal-icon"><img id="modal-img" src="" alt="" /></div>
+      <div class="modal-head-text">
+        <div id="modal-badge" class="modal-badge"></div>
+        <div id="modal-name" class="modal-name"></div>
+        <div id="modal-section" class="modal-section-label"></div>
+      </div>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
   </div>
 </div>
 
@@ -670,6 +793,941 @@ function populate(id, items) {
   const isGen = id === 'gen-grid';
   items.forEach(item => grid.appendChild(makeItem(item, isGen)));
 }
+
+/* ════════════════════════════════════════════
+   FULL PATCH NOTES DATA  (shown in modal on click)
+════════════════════════════════════════════ */
+const fullNotes = {
+
+  /* ──────── ASCENDANCIES ──────── */
+  'SCION\n(RELIQUARIAN)': {
+    section: 'New Ascendancy — Scion',
+    summary: 'The Reliquarian is a brand new second Ascendancy option for the Scion, introduced in 3.28 Mirage. It borrows the active effects of powerful unique items without requiring you to equip them.',
+    blocks: [
+      { title: 'How It Works', body: 'When ascending as Reliquarian, you choose from a rotating pool of unique item effects. These effects are granted as Ascendancy passives — freeing up the corresponding equipment slots for rare stat-optimised gear. The pool rotates each league, making each Reliquarian experience unique.' },
+      { title: 'Available Node Types (Mirage League)', items: [
+        '<b>Astral Projector effect</b> (Ring) — Nova spells are cast at your cursor\'s location instead of around you',
+        '<b>Victario\'s Influence effect</b> (Body Armour) — Nearby allies gain +2 to the level of their Aura gems',
+        '<b>Astramentis effect</b> (Amulet) — +60 to all Attributes',
+        '<b>Terminus Est effect</b> (Sword) — 20% chance to gain a Frenzy Charge on killing a Bleeding enemy',
+        '<b>Heartbreaker effect</b> (Dagger) — Culling Strike on any kill; restore life on kill',
+        'Further nodes borrow from additional unique items in the pool',
+      ]},
+      { title: 'Why It Is Strong', body: 'Freeing a ring or chest slot normally occupied by a mandatory unique opens enormous optimisation space. A Pyroclast Miner, for example, normally needs Astral Projector as a ring — now both rings can be rare stat-sticks, potentially adding hundreds of life/damage. The Astramentis node alone replaces an entire attribute-solving item.' },
+      { title: 'Design Context', body: 'The Reliquarian sits alongside the existing Ascendant option for the Scion. Unlike Ascendant (which mimics passive tree nodes from other classes), Reliquarian mimics equipped unique item effects — a fundamentally different power axis.' },
+    ]
+  },
+
+  'CHIEFTAIN': {
+    section: 'Ascendancy Changes — Chieftain',
+    summary: 'Chieftain received a net nerf to its signature explosion mechanic. The chance to trigger doubled, but the damage was halved — a downgrade for builds relying on large explosion damage.',
+    blocks: [
+      { title: 'Hinekora, Death\'s Fury — Changed', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Explosion chance on kill', '5%', '10%'],
+          ['Explosion damage', '500% of max life', '250% of max life'],
+          ['Net DPS change', '—', '~Neutral to slight nerf (triggers more often but hits half as hard)'],
+        ]
+      }},
+      { title: 'Impact', body: 'For Righteous Fire Chieftain (the dominant use case), this is a moderate nerf. Explosions triggered more frequently but deal less burst damage per proc. The build remains the best ascendancy for RF thanks to its life regen and totem synergies — the explosion nerf is noticeable but not devastating.' },
+      { title: 'Other Chieftain Nodes', body: 'Valako, Ngamahu, Tasalio, and Arohongui nodes are unchanged in 3.28. The overall strength of Chieftain in the RF archetype is maintained.' },
+    ]
+  },
+
+  'ASSASSIN': {
+    section: 'Ascendancy Changes — Assassin',
+    summary: 'The Opportunistic notable was upgraded to grant full reflect immunity — removing the last major risk of playing crit-based attack and spell builds.',
+    blocks: [
+      { title: 'Opportunistic — Buffed', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Reflect immunity', 'Damage from your Critical Strikes cannot be Reflected', 'Damage cannot be Reflected'],
+          ['Coverage', 'Only crits were safe', 'All damage, including non-crit hits, is safe'],
+        ]
+      }},
+      { title: 'Why This Matters', body: 'Previously, on a non-crit hit (due to low crit chance roll or enemy dodge), reflect damage could still kill you. With full "Damage Cannot be Reflected," Assassin is now completely immune regardless of whether the hit was a critical strike or not. This directly benefits Storm Brand Assassin, Arc Assassin, and any other crit-based spell or attack build.' },
+      { title: 'Synergy with Storm Brand', body: 'Combined with Storm Brand\'s 80% damage buff against branded enemies (also in 3.28), this makes Storm Brand Assassin one of the strongest sleeper builds of the league. The reflect immunity removes the build\'s only historical death condition.' },
+    ]
+  },
+
+  'ELEMENTALIST': {
+    section: 'Ascendancy Changes — Elementalist',
+    summary: 'Liege of the Primordial lost its golem buff effect bonus — a significant nerf to all Golem-scaling Elementalist builds.',
+    blocks: [
+      { title: 'Liege of the Primordial — Nerfed', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Golem buff effect', '+50% increased Effect of Buffs granted by your Golems', 'Removed entirely'],
+          ['Remaining effects', 'Golems cannot be Targeted by Enemies\' Spells; Resummoned 4s after death; Immune to Elemental Damage', 'Same — only the buff effect bonus removed'],
+        ]
+      }},
+      { title: 'Impact on Golem Builds', body: 'This nerf primarily hurts builds that relied on Golem buffs for scaling player damage — such as Chaos Golem (Physical Reduction) and Stone Golem (Life Regen) scaling. Carrion Golem minion builds are less affected since they don\'t rely on the buff effect bonus for damage.' },
+      { title: 'Cluster Jewel Change', body: 'Primordial Bond notable on Cluster Jewels was also nerfed from 40% to 20% increased Golem Buff Effect. These two nerfs compound each other for heavily golem-buffed builds.' },
+    ]
+  },
+
+  'WARDEN': {
+    section: 'Ascendancy Changes — Warden',
+    summary: 'Warden received meaningful buffs to Avatar of the Wilds and Lesson of the Seasons — strengthening the Unbound elemental damage window and flat damage reduction.',
+    blocks: [
+      { title: 'Avatar of the Wilds — Buffed', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Elemental damage while Unbound', '80% more', '100% more'],
+          ['Net multiplier increase', '—', '~11% more overall damage during Unbound window'],
+        ]
+      }},
+      { title: 'Lesson of the Seasons — Buffed', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Damage reduction per Bark', '-15 Fire, Cold, and Lightning Damage from Spell Hits', '-25 Damage of each Damage Type from Spell Hits per Bark'],
+          ['Coverage improvement', 'Elemental only', 'All damage types (includes Chaos, Physical)'],
+        ]
+      }},
+      { title: 'Why This Matters', body: 'The Avatar of the Wilds buff makes the Unbound window substantially stronger for any elemental bow or wand build. Combined with Oath of Winter (permafreeze) and Tinctures (cannot be flask-disabled), Kinetic Fusillade Warden becomes one of the highest-ceiling non-meta builds in the league.' },
+    ]
+  },
+
+  'SABOTEUR': {
+    section: 'Ascendancy Changes — Saboteur',
+    summary: 'Saboteur received multiple targeted buffs to mine and trap playstyles — improving cooldown recovery and triggered spell damage.',
+    blocks: [
+      { title: 'Like Clockwork — Buffed', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Mine Detonation Cooldown Recovery Rate', '40% increased', '50% increased'],
+        ]
+      }},
+      { title: 'Perfect Crime — Buffed', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Triggered Spell Damage penalty', '35% less Damage with Triggered Spells', '30% less Damage with Triggered Spells'],
+          ['Net effect', '—', '~7.7% more triggered spell damage'],
+        ]
+      }},
+      { title: 'Calculated Risk — Changed', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['New effect', '—', 'Damage of Enemies Hitting You is Unlucky (attackers always use their lower damage roll)'],
+        ]
+      }},
+      { title: 'Impact', body: 'These are incremental improvements that directly benefit Pyroclast Mine and other mine/trap builds. The CDR buff means detonation cycles rotate faster, and the less-damage penalty reduction means triggered skills hit harder. Saboteur was already a solid ascendancy — these buffs make it quietly stronger without changing the meta dramatically.' },
+    ]
+  },
+
+  'GUARDIAN': {
+    section: 'Ascendancy Changes — Guardian',
+    summary: 'Guardian received the most extensive rework of any ascendancy in 3.28. The Sentinel of Radiance minion is now permanent, a new notable was added, and Time of Need was significantly buffed.',
+    blocks: [
+      { title: 'Sentinel of Radiance — Permanent', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Duration', 'Limited duration — expired and needed to be renewed', 'Permanent — no duration, never expires'],
+          ['Movement Speed', 'Standard', '+36% more Movement Speed'],
+        ]
+      }},
+      { title: 'Time of Need — Buffed', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Ailment removal', 'Removes Elemental Ailments and Curses every 4 seconds', 'Removes ALL Ailments and ALL Curses every 4 seconds'],
+          ['New coverage', 'Did not cover Bleed, Poison, Freeze', 'Covers Bleed, Poison, Freeze, Shock, and all other ailments'],
+        ]
+      }},
+      { title: 'Marshal of Divinity (NEW 2-Point Notable)', items: [
+        'Your Melee Hits inflict Hallowing Flame on Enemies',
+        'Allies dealing Damage to enemies Removes a stack of Hallowing Flame',
+        'For each stack removed: you gain 10% of Physical Damage as Extra Lightning Damage (up to 80%)',
+        'Creates a powerful synergy loop between you and allied minions',
+      ]},
+      { title: 'Impact on Absolution Guardian', body: 'The permanent Sentinel of Radiance companion pairs beautifully with Absolution\'s own summoned Sentinels. Time of Need\'s expanded coverage means you are effectively ailment-immune on a 4-second cycle without investing in flask immunity. This is one of the strongest double-buff packages any build received in 3.28.' },
+    ]
+  },
+
+  /* ──────── GEMS ──────── */
+  'HOLY\nHAMMERS': {
+    section: 'New Skill Gem — 3.28 Mirage',
+    summary: 'Holy Hammers is a brand new Strength/Intelligence skill introduced in 3.28. It is the centerpiece of the new Holy skill category and the starting skill for Templar characters.',
+    blocks: [
+      { title: 'Mechanics', items: [
+        'Slam the ground forward to call down a Holy Hammer at a target location',
+        'When the Hammer hits an enemy, it cascades — creating another Hammer to hit the next nearby enemy',
+        'The cascade repeats, clearing entire packs from a single slam',
+        'Expend a Power Charge: one additional Hammer is called down on each side of the initial hit (flanking hammers)',
+        'Power Charge consumption dramatically increases single-target DPS for bosses',
+      ]},
+      { title: 'Gem Properties', table: {
+        headers: ['Property', 'Value'],
+        rows: [
+          ['Tags', 'Strength, Intelligence, Attack, Melee, Slam, Area of Effect'],
+          ['Weapon types', 'Two-handed maces, staves'],
+          ['Starting class', 'Templar (replaces Spectral Throw)'],
+          ['Damage type', 'Physical (convertible)'],
+        ]
+      }},
+      { title: 'Recommended Build', body: 'Inquisitor "Holy Hammer Slammer" — Righteous Providence + Inevitable Judgement for free elemental penetration. Use a Large Cluster Jewel with "Fuel the Fight" for Power Charge generation and mana leech. Static Strike generates Power Charges between Holy Hammer casts for boss DPS windows.' },
+    ]
+  },
+
+  'HOLY\nSTRIKE': {
+    section: 'New Skill Gem — 3.28 Mirage',
+    summary: 'Holy Strike imbues your weapon with holy energy, summoning undamageable Holy Armament minions that attack your targets using copies of your weapon stats.',
+    blocks: [
+      { title: 'Mechanics', items: [
+        'Imbue your weapon — the imbued state persists until you stop attacking',
+        'On each hit, a Holy Armament is summoned at the target\'s location',
+        'Holy Armaments are undamageable — they cannot be killed by enemies',
+        'Each Armament attacks the target using copies of your weapon\'s stat ranges',
+        'Multiple Armaments can stack on a single target for rapid damage amplification',
+      ]},
+      { title: 'Gem Properties', table: {
+        headers: ['Property', 'Value'],
+        rows: [
+          ['Tags', 'Strength, Intelligence, Attack, Melee, Duration'],
+          ['Weapon types', 'Any melee weapon'],
+          ['Damage source', 'Minion — scales with Minion Damage supports'],
+          ['Duration', 'Armaments persist while you continue attacking'],
+        ]
+      }},
+      { title: 'Design Context', body: 'Holy Strike creates a hybrid attack/minion playstyle. The Armaments scale with Minion Damage supports, creating an unusual link between your attack and minion damage scaling. Best explored by Guardian or Necromancer ascendancies that already invest in minion scaling.' },
+    ]
+  },
+
+  'DIVINE\nBLAST': {
+    section: 'New Skill Gem — 3.28 Mirage',
+    summary: 'Divine Blast projects a beam of holy light from your shield to a target, creating an implosion that detonates after a short delay, followed by an even larger explosion.',
+    blocks: [
+      { title: 'Mechanics', items: [
+        'Requires a shield to be equipped — fires the beam from your shield',
+        'The beam travels to the target, creating an Implosion at the destination',
+        'The Implosion detonates after a short delay — allows brief "set and wait" timing',
+        'After the Implosion, a larger secondary Explosion detonates at the same location',
+        'Two damage instances: Implosion (smaller, faster) + Explosion (larger, delayed)',
+      ]},
+      { title: 'Gem Properties', table: {
+        headers: ['Property', 'Value'],
+        rows: [
+          ['Tags', 'Strength, Intelligence, Spell, Projectile, Area of Effect, Fire'],
+          ['Requirement', 'Shield equipped'],
+          ['Damage type', 'Fire / Holy'],
+        ]
+      }},
+      { title: 'Usage Notes', body: 'Divine Blast is best paired with high block-chance builds using shields, where the block stats justify the shield slot. The two-explosion mechanic rewards timing awareness and works well with damage-on-full-life effects between the Implosion and Explosion windows.' },
+    ]
+  },
+
+  'SHIELD OF\nLIGHT': {
+    section: 'New Skill Gem — 3.28 Mirage',
+    summary: 'Shield of Light triggers a light wave when you block a hit. The wave travels outward and allies can echo it, creating a chain of holy projectiles across the screen.',
+    blocks: [
+      { title: 'Mechanics', items: [
+        'Activate to repel hits with a wave emanating from your shield',
+        'Blocked hits trigger the wave automatically — no manual activation required during combat',
+        'The light wave travels in a cone in the direction of the blocked hit',
+        'Nearby allies (including minions and totems) can echo the wave outward in their own cones',
+        'Multiple echoes chain across an area, dealing damage to everything in range',
+      ]},
+      { title: 'Synergies', items: [
+        'High block chance builds (Gladiator, Guardian) trigger it most frequently',
+        'Minion builds echo the wave via all active minions — massive AoE coverage',
+        'Stacks with Glancing Blows keystone (blocks everything, triggers wave on all blocked hits)',
+        'Holy Flame Totem and other totems also echo the wave',
+      ]},
+    ]
+  },
+
+  'HOLY SWEEP\n(REWORK)': {
+    section: 'Gem Rework — Sweep → Holy Sweep',
+    summary: 'Sweep was reworked into Holy Sweep, fundamentally changing how it operates. Instead of a simple melee swing, Holy Sweep now calls down Holy Hammers onto struck enemies.',
+    blocks: [
+      { title: 'What Changed', table: {
+        headers: ['Aspect', 'Old Sweep', 'New Holy Sweep'],
+        rows: [
+          ['Visual', 'Simple horizontal swing', 'Swing that calls down Holy Hammers on hit'],
+          ['Projectile immunity', 'Normal hit — could miss or be evaded', 'Hammer hits cannot be Evaded'],
+          ['Weapon requirement', 'Two-handed melee', 'Two-handed mace or staff specifically'],
+          ['Damage source', 'Direct melee attack', 'Melee attack + Hammer projectiles'],
+          ['Tags added', 'Attack, AoE, Melee', '+ Ranged (Hammer portion cannot be evaded)'],
+        ]
+      }},
+      { title: 'Impact', body: 'The "cannot be evaded" property on the Hammer portion is significant for endgame content where enemies have high evasion ratings. Two-handed mace/staff restriction is slightly narrower than old Sweep\'s two-handed melee, but the damage ceiling is higher.' },
+    ]
+  },
+
+  'ABSOLUTION': {
+    section: 'Gem Changes — Buffed',
+    summary: 'Absolution received sweeping buffs in 3.28 that transform how the skill plays — the base debuff is now useful, Sentinels stay far longer, and their AoE is significantly larger.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Base debuff duration', '1 second', '3 seconds'],
+          ['Sentinel of Absolution duration', '10 seconds', '15 seconds'],
+          ['Sentinel AoE', 'Base', '+44% more Area of Effect'],
+          ['Lightning Blast damage', 'Base', '+40% more damage'],
+        ]
+      }},
+      { title: 'What 3× Duration Means in Practice', body: 'The 1-second debuff was barely relevant in fast-paced play — you often killed enemies before getting a second cast in. At 3 seconds, the debuff is genuinely useful for sustained damage against rares and bosses. Combined with 15-second Sentinels (was 10s), your army stays alive through long boss fights without constant recasting.' },
+      { title: 'Synergy with Guardian Rework', body: 'Guardian\'s Sentinel of Radiance is now permanent AND gives +36% movement speed. Your Absolution Sentinels (15s duration) + permanent Radiance Sentinel form a self-sufficient army that is almost never at risk of expiring mid-fight.' },
+    ]
+  },
+
+  'ANIMATE\nGUARDIAN': {
+    section: 'Gem Changes — Buffed',
+    summary: 'Animate Guardian of Smiting (the transfigured variant) received a major damage buff — minion damage doubled and impact radius increased.',
+    blocks: [
+      { title: 'Changes — Animate Guardian of Smiting', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Minion damage', 'Base', 'Doubled (100% increase)'],
+          ['Impact radius', 'Base radius', 'Significantly increased'],
+        ]
+      }},
+      { title: 'Context', body: 'The base Animate Guardian gem is unchanged. Only the Smiting transfigured variant was buffed. This variant makes the Guardian slam the ground to deal AoE damage rather than the standard single-target behaviour.' },
+    ]
+  },
+
+  'CONSECRATED\nPATH': {
+    section: 'Gem Changes — Buffed',
+    summary: 'Consecrated Path received a damage effectiveness boost and a quality rework that rewards hitting enemies closer to you.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Damage Effectiveness', 'Base', 'Increased (exact values scale with gem level)'],
+          ['Quality effect', 'Generic AoE or damage', 'Now provides more damage to enemies closer to the landing point'],
+        ]
+      }},
+      { title: 'Playstyle Impact', body: 'The quality change rewards aggressive play — hitting enemies at point-blank range now deals substantially more damage. This suits fast-paced teleport-adjacent play styles where you land directly on top of enemies.' },
+    ]
+  },
+
+  'DOMINATING\nBLOW': {
+    section: 'Gem Changes — Buffed',
+    summary: 'Dominating Blow now summons Sentinels of Dominance when you kill rare enemies in addition to unique enemies. Duration was also extended.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Sentinel on kill trigger', 'Only on Unique enemies', 'On Rare AND Unique enemies'],
+          ['Sentinel duration', 'Shorter', 'Extended'],
+        ]
+      }},
+      { title: 'Impact', body: 'This change dramatically increases how often Sentinels are summoned during mapping — rare monsters are everywhere, whereas uniques only appear occasionally. Dominating Blow becomes far more consistent as a mapping skill, building a large Sentinel army throughout a map rather than sporadically.' },
+    ]
+  },
+
+  'HOLY FLAME\nTOTEM': {
+    section: 'Gem Changes — Buffed',
+    summary: 'Holy Flame Totem now fires a variable number of projectiles based on gem level instead of the fixed 3 projectiles it always fired previously.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Projectile count', 'Always 3 (fixed)', '3 at level 1, scaling to 6 at level 20'],
+          ['DPS scaling', 'Linear with damage', 'Also scales with additional projectiles'],
+        ]
+      }},
+      { title: 'Impact', body: 'At level 20, Holy Flame Totem fires twice as many projectiles. Combined with Fork or Pierce supports, this means far more coverage per totem. A 20/20 gem with support is now significantly stronger than it was, making the skill viable for totem-focused builds previously unable to use it efficiently.' },
+    ]
+  },
+
+  'PENANCE\nBRAND': {
+    section: 'Gem Changes — Buffed',
+    summary: 'Penance Brand received a direct damage buff and increased effectiveness of added damage — compensation for the significant nerf given to its Dissipation variant.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['More Damage multiplier', 'Base', '+10% more Damage'],
+          ['Effectiveness of Added Damage', '470–570%', '520–630%'],
+        ]
+      }},
+      { title: 'Context', body: 'The Penance Brand of Dissipation transfigured variant was nerfed heavily in this patch (it was the dominant variant). The base Penance Brand was buffed to ensure it remains a competitive option for players who don\'t need the specific Dissipation playstyle.' },
+    ]
+  },
+
+  'PURIFYING\nFLAME': {
+    section: 'Gem Changes — Buffed',
+    summary: 'Purifying Flame of Revelations (transfigured variant) received a mana cost reduction and a significant shockwave damage buff.',
+    blocks: [
+      { title: 'Changes — Purifying Flame of Revelations', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Mana cost', 'Higher', 'Reduced'],
+          ['Shockwave Damage', '110% more', '150% more'],
+        ]
+      }},
+      { title: 'Impact', body: 'The shockwave component was the main damage source of this variant. The 40 percentage point increase to the "more" modifier on shockwave damage is a substantial buff to its burst potential. The mana cost reduction improves sustain for builds without high mana regeneration.' },
+    ]
+  },
+
+  'RAISE\nSPECTRE': {
+    section: 'Gem Changes — Buffed',
+    summary: 'Raise Spectre now has improved scaling at gem levels beyond 20, benefiting builds that use Empower Support or +gem level items.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Level 20 stats', 'Standard', 'Unchanged'],
+          ['Levels 21+', 'Minimal improvement per level', 'Better scaling per level beyond 20'],
+        ]
+      }},
+      { title: 'Impact', body: 'This buff specifically targets endgame minion builds that use +3 to Raise Spectre staves, Empower Support, or other gem level inflation. The spectre\'s stats at level 23-25 are now meaningfully better than before, increasing the value of investing in gem level scaling.' },
+    ]
+  },
+
+  'STORM\nBRAND': {
+    section: 'Gem Changes — Buffed',
+    summary: 'Storm Brand received one of the largest raw damage buffs of the patch — effectiveness nearly doubled and a new "80% more damage against branded enemies" modifier added.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Effectiveness of Added Damage', '~30%', '45–55%'],
+          ['More Damage against Branded enemy', '0 (did not exist)', '80% more Damage with Hits against Branded Enemy'],
+        ]
+      }},
+      { title: 'Combined Effect', body: 'The 80% more damage against branded enemies applies whenever the brand is actively attached — which is almost always in practice. Combined with the increased effectiveness of added damage, Storm Brand\'s total damage output has roughly doubled compared to 3.27.' },
+      { title: 'Assassin Synergy', body: 'Assassin\'s Opportunistic now grants full "Damage Cannot be Reflected" — removing Storm Brand\'s historical death condition of Elemental Reflect. With this and the 80% damage buff, Storm Brand Assassin is the single biggest 3.28 sleeper build.' },
+    ]
+  },
+
+  'SUMMON\nHOLY RELIC': {
+    section: 'Gem Changes — Buffed',
+    summary: 'Summon Holy Relic\'s nova regeneration was increased, making it more effective as a sustain tool for minion and life-based builds.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Nova regeneration amount', 'Base value', 'Increased'],
+          ['Effect', 'Moderate life regen pulse', 'More significant life regen per nova'],
+        ]
+      }},
+      { title: 'Usage', body: 'Holy Relic sits in an offhand weapon swap or low-priority 4L. It pulses life regeneration to you and nearby allies whenever you or your minions land a kill. The buff makes it more worthwhile as a defensive layer for minion builds running in its proximity.' },
+    ]
+  },
+
+  'THUNDER-\nSTORM': {
+    section: 'Gem Changes — Buffed',
+    summary: 'Thunderstorm received a significant buff to its explosion damage — increasing from base to 300% more.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Explosion Damage', 'Base', '300% more Explosion Damage'],
+        ]
+      }},
+      { title: 'Impact', body: 'Thunderstorm summons a storm that repeatedly strikes with lightning bolts ending in explosions. The explosion component was previously much weaker than the initial bolt. At 300% more damage, the explosion now deals substantial area damage, making Thunderstorm better suited for clearing clustered enemies.' },
+    ]
+  },
+
+  'PENANCE BRAND\nOF DISSIPATION': {
+    section: 'Gem Changes — Nerfed',
+    summary: 'Penance Brand of Dissipation (transfigured variant) received a significant damage nerf as it was the dominant endgame brand skill in 3.27.',
+    blocks: [
+      { title: 'What Was Nerfed', body: 'Penance Brand of Dissipation\'s damage output was reduced. The exact "before" values are not fully disclosed but the nerf was described as "significant" by the developers. The regular Penance Brand was buffed simultaneously to ensure players have a viable alternative.' },
+      { title: 'Why It Was Nerfed', body: 'Dissipation dominated the brand skill space in 3.27 due to its superior single-target mechanics. The nerf brings it in line with the regular variant, ensuring both options are relevant choices rather than one being strictly superior.' },
+      { title: 'Current State', body: 'Penance Brand of Dissipation remains a functional skill post-nerf, but players should evaluate whether the regular Penance Brand (which was buffed to 520–630% effectiveness and +10% more damage) now serves their playstyle better.' },
+    ]
+  },
+
+  'DETONATE DEAD\nOF SCAVENGING': {
+    section: 'Gem Changes — Nerfed',
+    summary: 'Detonate Dead of Scavenging (transfigured variant) had its ailment damage reduced from 60% less to 70% less.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Ailment Damage modifier', '60% less Ailment Damage', '70% less Ailment Damage'],
+        ]
+      }},
+      { title: 'Impact', body: 'This nerf specifically targets ailment-based Detonate Dead builds — particularly Ignite variants that relied on the Scavenging modifier to maintain competitive ailment DPS. A 10 percentage point increase in the less modifier represents roughly 25% less ailment damage output than before the nerf.' },
+    ]
+  },
+
+  'EARTH-\nSHATTER': {
+    section: 'Gem Changes — Nerfed',
+    summary: 'Earthshatter had its Effectiveness of Added Damage reduced at level 20.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Effectiveness of Added Damage (Lvl 20)', '393%', '329%'],
+          ['Reduction', '—', '~16% less effective added damage'],
+        ]
+      }},
+      { title: 'Impact', body: 'Earthshatter builds that heavily invested in added damage (via support gems like Added Fire Damage, Brutality, etc.) will see a proportional DPS reduction. Builds scaling base weapon damage rather than added damage are less affected. The skill remains functional but requires revisiting damage calculations.' },
+    ]
+  },
+
+  'STATIC\nSTRIKE': {
+    section: 'Gem Changes — Nerfed',
+    summary: 'Static Strike\'s beam damage was adjusted downward.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Beam Damage', 'Previous value', '30% less Beam Damage'],
+        ]
+      }},
+      { title: 'Note on Transfigured Variant', body: 'Static Strike of Gathering Lightning is a new transfigured variant added in 3.28. If you want to continue playing Static Strike builds, the new variant may compensate for the nerf to the base skill with different mechanics.' },
+    ]
+  },
+
+  'VIPER STRIKE\nOF MAMBA': {
+    section: 'Gem Changes — Nerfed',
+    summary: 'Viper Strike of the Mamba now applies an attack speed penalty when dual wielding.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Dual wield penalty', 'None', 'Attack speed penalty when dual wielding'],
+        ]
+      }},
+      { title: 'Impact', body: 'Dual wield Viper Strike of the Mamba was a common setup for stacking poison via fast attack speed with two weapons. The attack speed penalty directly reduces the rate of poison application, nerfing the build\'s primary scaling mechanism. Single-weapon configurations are less affected.' },
+    ]
+  },
+
+  'ORB OF\nSTORMS': {
+    section: 'Gem Changes — Changed',
+    summary: 'Orb of Storms now supports Spell Echo, enabling new looping interaction patterns with echo-based builds.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Spell Echo compatibility', 'Not supported', 'Supports Spell Echo'],
+        ]
+      }},
+      { title: 'Transfigured Variant', body: 'Orb of Storms of Squalls is a new transfigured variant that causes the orb to teleport to random struck enemies rather than staying stationary. Also introduced in 3.28.' },
+      { title: 'Impact', body: 'Spell Echo allowing the orb to fire extra projectiles before cooldown creates new build possibilities for shock-stacking and chain lightning setups. Particularly useful for Elementalist and Trickster builds that stack spell echo effects.' },
+    ]
+  },
+
+  'PORTAL': {
+    section: 'Gem Changes — Changed',
+    summary: 'Portal is no longer interrupted by self-inflicted damage, fixing a longstanding quality-of-life issue.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Issue', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Self-damage interruption', 'Any self-damage (Consecrated Ground, Blood Rage, etc.) cancelled the portal cast', 'Self-damage no longer interrupts Portal'],
+        ]
+      }},
+      { title: 'Impact', body: 'Builds running Blood Rage, standing on Consecrated Ground, or using life-costing mechanics could previously have their portal cancelled by the resulting self-damage. This fix is purely quality-of-life — you can now reliably open portals without managing damage-avoidance timing.' },
+    ]
+  },
+
+  'STORM\nBURST': {
+    section: 'Gem Changes — Changed',
+    summary: 'Storm Burst\'s orb placement timing was adjusted, changing the optimal channelling rhythm.',
+    blocks: [
+      { title: 'Changes', body: 'The timing at which Storm Burst orbs are placed during channelling was adjusted. This changes when orbs appear relative to your channel duration, affecting the optimal release timing for maximum orb detonation overlap.' },
+      { title: 'New Transfigured Variant', body: 'Storm Burst of Repulsion is a new transfigured variant that channels orbs which jump from the targeted area and explode with increased scale when released. This provides a new explosion-focused variant for burst-DPS builds.' },
+    ]
+  },
+
+  'WINTER\nORB': {
+    section: 'Gem Changes — Changed',
+    summary: 'Projectile speed now affects Winter Orb\'s impact timing, allowing builds to modify when projectiles land via projectile speed modifiers.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Projectile speed interaction', 'Impact timing fixed regardless of projectile speed', 'Projectile speed modifiers affect when projectiles land'],
+        ]
+      }},
+      { title: 'Impact', body: 'This allows Winter Orb builds to use Faster Projectiles support or +% Projectile Speed mods to control the timing of projectile impacts. For some situations this enables burst alignment with damage windows; for others it may require removing certain support gems that previously were harmless.' },
+    ]
+  },
+
+  /* ──────── GENERAL ──────── */
+  'GROUND\nLOOT BUFF': {
+    section: 'General Changes — Economy',
+    summary: 'Currency items now represent a significantly larger portion of all ground drops. Non-unique equipment drops were reduced to compensate.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Category', 'Change'],
+        rows: [
+          ['Currency items (overall)', 'Significantly larger portion of drops'],
+          ['Exalted Orbs', 'Comparatively more common'],
+          ['Regal Orbs', 'Comparatively more common'],
+          ['Non-unique equipment', '~6% less common'],
+          ['Unique items', 'Unchanged'],
+        ]
+      }},
+      { title: 'Impact', body: 'Maps will feel less cluttered with vendor-trash equipment and more rewarding with currency pickups. The Exalted and Regal Orb increases are particularly notable for crafting-focused players — these orbs were relatively scarce in recent leagues.' },
+    ]
+  },
+
+  'EXCEPTIONAL\nSUPPORT GEMS': {
+    section: 'General Changes — Gem System',
+    summary: 'Over 40 new Exceptional Support Gems replace the Awakened Support Gem system (except Empower, Enlighten, and Enhance).',
+    blocks: [
+      { title: 'What Changed', items: [
+        'All Awakened Support Gems (except Awakened Empower, Enlighten, Enhance) can no longer be obtained',
+        '40+ new Exceptional Support Gems were introduced',
+        'These gems have "transformative properties" — they change how a skill functions, not just boost numbers',
+        'Existing Awakened gems in player inventories continue to function but cannot be rerolled',
+      ]},
+      { title: 'Example Exceptional Supports', items: [
+        '<b>Hallow Support</b> — Melee attacks inflict Hallowing Flame (synergises with new Holy skill category)',
+        '<b>Blessed Call Support</b> — Warcries create Consecrated Ground',
+        '<b>Excommunicate Support</b> — Melee attacks gain fire and lightning damage',
+        '<b>Exemplar Support</b> — Minions gain crit bonuses based on player crit strikes',
+        '35+ additional gems with various transformative effects',
+      ]},
+      { title: 'Obtaining Exceptional Gems', body: 'Exceptional Support Gems drop from high-tier content (Maven-touched bosses, Uber encounters, high-level maps). They cannot be crafted from other gems. The Bestiary gem recipe for levelling Awakened gems has been updated to work with Exceptional gems instead.' },
+    ]
+  },
+
+  'INT / ES\nNERF': {
+    section: 'General Changes — Core Mechanics',
+    summary: 'Intelligence now grants Energy Shield at half the previous rate — a sweeping nerf to all INT-stacking and pure Energy Shield builds.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['ES from Intelligence', '1% max ES per 5 Intelligence', '1% max ES per 10 Intelligence'],
+          ['Effect', 'Base', 'Exactly half the ES from INT scaling'],
+        ]
+      }},
+      { title: 'Who Is Affected', items: [
+        '<b>INT-stacking builds</b> (Astramentis + INT stacks) — halved ES scaling from attribute investment',
+        '<b>Pure Energy Shield builds</b> — all builds relying on INT for ES base lost ~30–50% ES depending on how much INT they stacked',
+        '<b>Hybrid life/ES builds</b> — moderate impact depending on INT investment',
+        '<b>Life-based builds</b> — minimal to zero impact',
+        '<b>Mana/CI builds without heavy INT</b> — small impact',
+      ]},
+      { title: 'Winners', body: 'Life-based builds, hybrid Armour/Life, and Evasion-based characters are now comparatively stronger. The meta shift strongly favours Gladiator, Slayer, Berserker, and other life-scaling ascendancies over Occultist, Trickster, and Scion INT stackers.' },
+    ]
+  },
+
+  'RELIQUARIAN\nNEW ASCEND.': {
+    section: 'General Changes — New Ascendancy',
+    summary: 'Reliquarian is the new second Ascendancy class for the Scion, introduced in 3.28 Mirage. It grants the effects of specific unique items without requiring you to equip them.',
+    blocks: [
+      { title: 'Core Mechanic', body: 'Each Reliquarian Ascendancy passive node borrows the effect of a specific unique item. The effect is applied as if you had the item equipped — but you don\'t need to actually equip it. This frees the equipment slot for a rare or other unique item of your choice.' },
+      { title: 'Why It Matters', body: 'Some unique items are "build-mandatory" — you essentially can\'t play certain builds without them. The Reliquarian removes this constraint. If Astral Projector is mandatory for your nova mine build, you can now take it as a passive and wear any ring you want.' },
+      { title: 'Available in Mirage League', items: [
+        'Astral Projector (Ring effect)',
+        'Victario\'s Influence (Body Armour effect)',
+        'Astramentis (Amulet effect — +60 all attributes)',
+        'Terminus Est (Sword effect)',
+        'Heartbreaker (Dagger effect)',
+        'Additional rotating pool entries',
+      ]},
+    ]
+  },
+
+  'ATLAS\nREWORK': {
+    section: 'General Changes — Atlas',
+    summary: 'The Atlas received the most extensive structural overhaul since its introduction. Maps are now decoupled from areas, Arcane Astrolabes modify zones, and 25 new maps were added.',
+    blocks: [
+      { title: 'Major Changes', items: [
+        '<b>Map/Area Decoupling</b> — Map items no longer correspond to specific areas. Players select layouts via the Map Device independently of the map item used',
+        '<b>Atlas Centred</b> — Four corner voidstone slots now frame the atlas',
+        '<b>Arcane Astrolabes</b> — New currency that creates Shaped Regions with zone-wide modifiers',
+        '<b>Memory Threads</b> — New progression mechanic replacing some existing systems',
+        '<b>Unique maps</b> — Now present directly on the Atlas (10 skill points available from ~20 unique maps)',
+        '<b>Nightmare Maps</b> — Tier 17 maps replaced by Nightmare Maps (see dedicated entry)',
+      ]},
+      { title: 'Removed Systems', items: [
+        'Favoured Map system removed entirely',
+        'Cartographer\'s Chisels no longer drop or appear in recipes (existing function unchanged)',
+        'Kirac Missions and associated Atlas passives removed',
+        'Memory Skills removed from Originator areas',
+        'Several frustrating map modifiers removed (player damage lockouts, petrification, etc.)',
+      ]},
+      { title: 'Maps Added / Removed', table: {
+        headers: ['Change', 'Count'],
+        rows: [
+          ['Maps added to pool', '25'],
+          ['Maps removed from pool', '24'],
+          ['Net change', '+1 map'],
+        ]
+      }},
+    ]
+  },
+
+  'NIGHTMARE\nMAPS': {
+    section: 'General Changes — New System',
+    summary: 'Tier 17 maps have been replaced by Nightmare Maps — a new high-end content tier with memory threads and Atlas skill point rewards.',
+    blocks: [
+      { title: 'What Are Nightmare Maps', items: [
+        'Replace Tier 17 maps in the endgame progression',
+        'Three new memory thread types: <b>Loneliness</b>, <b>Trauma</b>, and <b>Reverence</b>',
+        'Each completed Nightmare map grants 1 Atlas skill point',
+        'Nightmare maps connect to the Memory Vault reward system',
+        'Higher difficulty and reward density than standard Tier 16 maps',
+      ]},
+      { title: 'Memory Threads', body: 'Collecting and combining memory threads from Nightmare Maps unlocks powerful bonuses via the Memory Vault. The three thread types represent different aspects of the league\'s lore and provide distinct mechanical rewards.' },
+    ]
+  },
+
+  'HARBINGER\nREMOVED': {
+    section: 'General Changes — League Removal',
+    summary: 'Harbinger has been removed as a core mechanic. Its currency remains but the mechanic itself is gone, along with its atlas passives and unique items.',
+    blocks: [
+      { title: 'What Was Removed', items: [
+        'Harbinger encounters no longer appear in maps',
+        "Harbinger's Orbs, Engineer's Orbs, and Horizon Orbs are non-functional",
+        'All Harbinger shards removed from drop pools',
+        'All Harbinger-specific Divination Cards removed',
+        'All Harbinger-specific Unique Fragment items removed',
+        '8 Harbinger unique items removed from the game',
+        'All Harbinger Atlas passives removed',
+      ]},
+      { title: 'What Remains', items: [
+        'Fracturing Orbs remain as core drops',
+        'Ancient Orbs remain as core drops',
+        '6 Harbinger uniques moved to core drop pool: Immortal Will, Shattered Divinity, The Highwayman, The Nomad, The Rippling Thoughts, The Signal Fire',
+        'Harbinger Scarabs convert to Veiled Scarabs when found in stash',
+      ]},
+      { title: 'Context', body: 'Harbinger was one of the original core mechanics. Its removal follows the precedent of Synthesis (2019), Incursion Planner, and other mechanics that GGG rotated out. The Harbinger currency (Orbs) will still be obtainable through other means.' },
+    ]
+  },
+
+  'KEEPERS OF\nFLAME CORE': {
+    section: 'General Changes — League Integration',
+    summary: 'Keepers of the Flame (from 3.27) is now permanently core content. The Breach Hive system replaces Breachlords, new currency is added, and genesis tree changes take effect.',
+    blocks: [
+      { title: 'Core Integration Changes', items: [
+        'Ailith now encounters players in Act 6 Mud Flats',
+        'Breach Hives spawn from Act 6 onwards through endgame',
+        'Genesis Tree is fully grown by default — no need to cultivate it',
+        'Grafts cannot be grown; the branch-pruning system is simplified',
+        'Graftblood renamed to Hiveblood (max 100,000 capacity)',
+      ]},
+      { title: 'New Currency', body: '<b>Flesh of Xesht</b> — New currency that converts Breach unique items to their alternate Hiveborn versions. Allows players to upgrade Breach uniques to the new Hiveborn variants introduced in 3.27.' },
+      { title: 'New Atlas Keystones', items: [
+        '<b>Dimensional Foothold</b> — New atlas keystone related to Breach/Hive mechanics',
+        '<b>Enemy at the Gates</b> — New atlas keystone related to Breach/Hive encounter frequency',
+      ]},
+      { title: 'Breach Scarab Rework', body: 'The entire Breach scarab system was reworked to function with the new Hive encounters. Old Breachstone items are non-functional and can be exchanged via the vendor for Hivebrain Glands.' },
+    ]
+  },
+
+  'GENESIS TREE\nNERF': {
+    section: 'General Changes — Economy',
+    summary: 'The Genesis Tree\'s gear generation was significantly nerfed — it will no longer reliably produce extremely powerful items.',
+    blocks: [
+      { title: 'What Changed', body: 'The Genesis Tree\'s itemisation algorithm was adjusted to reduce the frequency and quality of high-tier item generation. In 3.27, the Tree was capable of producing mirror-tier or near-mirror-tier items through repeated interactions — this has been curtailed.' },
+      { title: 'Impact', body: 'Players who built entire leagues around farming the Genesis Tree for economy will need to pivot. The Tree still produces valuable items, but the expectation of "printing extremely good gear" is no longer realistic. Standard crafting methods (Essences, Fossils, Eldritch implicits) become comparatively more attractive.' },
+    ]
+  },
+
+  'HOLY GEM\nSYSTEM': {
+    section: 'General Changes — New Content',
+    summary: 'A new "Holy" skill category was introduced with 4 new skills, a skill rework, and new Support gems that interact with the Hallowing Flame mechanic.',
+    blocks: [
+      { title: 'New Holy Skills', items: [
+        '<b>Holy Hammers</b> — Slam calling down cascading hammers; cascade clears packs',
+        '<b>Holy Strike</b> — Imbue weapon to summon Holy Armament minions on hit',
+        '<b>Divine Blast</b> — Shield-based holy beam with delayed explosion',
+        '<b>Shield of Light</b> — Block-triggered light wave echoed by allies',
+        '<b>Holy Sweep</b> — Rework of Sweep; calls down Holy Hammers on swing',
+      ]},
+      { title: 'New Holy Supports', items: [
+        '<b>Hallow Support</b> — Melee attacks inflict Hallowing Flame on enemies',
+        '<b>Blessed Call Support</b> — Warcries create Consecrated Ground',
+        '<b>Excommunicate Support</b> — Melee attacks gain Fire and Lightning damage',
+      ]},
+      { title: 'Hallowing Flame Mechanic', body: 'Hallowing Flame is a new debuff inflicted by several Holy skills and the Hallow support. Stacks can be removed by allied hits for powerful damage conversion effects, most notably via the new Guardian notable Marshal of Divinity (10% of Physical as Extra Lightning per removed stack, up to 80%).' },
+      { title: 'Starting Classes', body: 'Templar now starts with Holy Strike (skill) and Hallow Support — replacing their previous starting skills. This reflects the new Holy skill theme for the Templar character class.' },
+    ]
+  },
+
+  'SETTLERS\nADJUSTED': {
+    section: 'General Changes — Settlers of Kalguur',
+    summary: 'Settlers of Kalguur (the 3.25 league now running as permanent core content) received economic rebalancing.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Feature', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Smelting speed', 'Standard', 'Doubled (at higher gold cost)'],
+          ['Farmer wages', 'Standard', 'Reduced by 50%'],
+          ['Mapper wages', 'Standard', 'Increased by 25%'],
+          ['Ores/bars yield', 'Equipment items', 'Now return currency items'],
+          ['Crops yield', 'Currency items', 'Now return equipment items (swapped)'],
+          ['Favoured resources', 'Fixed once set', 'Rerollable for 15,000 gold'],
+        ]
+      }},
+      { title: 'New: Mota Aro Port', body: 'A new port destination (Mota Aro) was added to the Kalguur trading network. Each port destination now grants specific tattoos and runegrafts corresponding to the destination\'s cultural identity.' },
+    ]
+  },
+
+  'SCARAB\nOVERHAUL': {
+    section: 'General Changes — Scarabs',
+    summary: 'Six new scarab types were added, one scarab was split into two specialised variants, and many existing scarabs received quantity increases.',
+    blocks: [
+      { title: 'New Scarabs', items: [
+        '<b>Abyss Descending Scarab</b>',
+        '<b>Anarchy Exceptional Scarab</b>',
+        '<b>Betrayal Unbreaking Scarab</b>',
+        '<b>Expedition Infusion Scarab</b>',
+        '<b>Kalguuran Enriching Scarab</b>',
+        '<b>Ritual Corpses Scarab</b>',
+      ]},
+      { title: 'Bisection Scarab Split', table: {
+        headers: ['Old Scarab', 'Replaced By'],
+        rows: [
+          ['Bisection Scarab', 'Sinistral Scarab (prefix-focused) + Dextral Scarab (suffix-focused)'],
+        ]
+      }},
+      { title: 'Notable Changes', items: [
+        'Influencing Scarab of Conversion renamed to "Interference" — now spawns additional boss instead of converting',
+        'Legion Scarab of Treasures: chest rewards now transfer to spawned monsters',
+        'Multiple scarabs received increased item quantity bonuses',
+      ]},
+    ]
+  },
+
+  'CHISELS\nREWORKED': {
+    section: 'General Changes — Quality System',
+    summary: 'Cartographer\'s Chisels now always provide exactly +20% quality regardless of current quality level, but the quality benefit to item quantity was halved.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Stat', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Quality per chisel', 'Variable (diminishing returns)','Always +20% quality per chisel'],
+          ['Item Quantity from quality', '20% quality = +20% IIQ', '20% quality = +10% IIQ'],
+          ['Chisels needed for 20%', '4+ (due to diminishing returns)', 'Always 1'],
+          ['Net IIQ at 20%', '+20% IIQ', '+10% IIQ'],
+        ]
+      }},
+      { title: 'Impact', body: 'This change reduces the incentive to chisel maps — you get half the IIQ bonus for the same investment. The convenience of always getting +20% from one chisel is offset by the halved reward. Most efficient players will chisel less in 3.28 compared to previous leagues.' },
+    ]
+  },
+
+  'UNIQUE ITEM\nUPGRADES': {
+    section: 'General Changes — New System',
+    summary: 'A new Coin of Restoration currency enables Fated Unique upgrades — similar to the old Prophecy system but applied to specific unique items.',
+    blocks: [
+      { title: 'How It Works', items: [
+        'Coin of Restoration is a new currency dropped in endgame content',
+        'Apply it to specific unique items to trigger their upgrade path',
+        'The upgrade transforms the unique into a more powerful "Fated" version',
+        'Example: Fleshrender (one-handed mace) upgrades to Skysunder',
+        'The target version (Skysunder) has significantly stronger stats than the base',
+      ]},
+      { title: 'Design Context', body: 'This system was inspired by the old Prophecy fated unique mechanic (removed in 3.17). Coin of Restoration reintroduces the concept without requiring the Prophecy system infrastructure. It creates a progression path for specific unique items that were previously dead-ends.' },
+    ]
+  },
+
+  'CURRENCY\nDROP BUFF': {
+    section: 'General Changes — Settlers Economy',
+    summary: 'Ore smelting and crop yields in Settlers of Kalguur were swapped, with smelting now returning currency and crops returning equipment.',
+    blocks: [
+      { title: 'Changes', table: {
+        headers: ['Activity', 'Before 3.28', 'After 3.28'],
+        rows: [
+          ['Smelting ores/bars', 'Returned equipment items', 'Returns currency items'],
+          ['Growing crops', 'Returned currency items', 'Returns equipment items'],
+          ['Port destinations', 'Generic rewards', 'Specific tattoos and runegrafts by port'],
+        ]
+      }},
+      { title: 'Impact', body: 'Smelting-focused Kalguur setups now convert to currency farming, while farming-focused setups yield equipment for crafting. This swap encourages players to specialise their town building strategies for either currency generation or gear progression.' },
+    ]
+  },
+
+  'ATLAS PASSIVE\nCHANGES': {
+    section: 'General Changes — Atlas Passives',
+    summary: 'Several new Atlas passive notables were added and several old ones removed as part of the Atlas restructuring.',
+    blocks: [
+      { title: 'New Notables', items: [
+        '<b>Paths Not Taken</b> — Maps can drop Divination Cards from other maps in the Atlas',
+        '<b>Synthesised Stability</b> — Collapse a different map in your shaped region when placing a memory',
+        '<b>Overloaded Circuits</b> — Maps in a shaped region open with 5 additional random notables',
+        '<b>Ancient Decay</b> — Increased detonation speed for relevant mechanics',
+      ]},
+      { title: 'Removed Notables', items: [
+        'Shadow Shaping removed',
+        'Bold Undertakings removed',
+        'Multiple other Atlas passives removed as the shaped region system changed',
+      ]},
+      { title: 'Scarab Changes', items: [
+        'New Abyss Descending, Anarchy Exceptional, Betrayal Unbreaking, Expedition Infusion, Kalguuran Enriching, Ritual Corpses scarabs',
+        'Bisection Scarab split into Sinistral and Dextral variants',
+        'Deadly Prey now grants Bestial Rage mechanic',
+        'Multiple threshold and quantity increases across existing scarabs',
+      ]},
+    ]
+  },
+};
+
+/* ════════════════════════════════════════════
+   MODAL LOGIC
+════════════════════════════════════════════ */
+function buildModalBody(note) {
+  return note.blocks.map(b => {
+    let inner = '';
+    if (b.body) inner += `<p>${b.body}</p>`;
+    if (b.items) inner += `<ul>${b.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+    if (b.table) {
+      inner += `<table class="pnote-table">
+        <thead><tr>${b.table.headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+        <tbody>${b.table.rows.map(r=>`<tr>${r.map((c,i)=>{
+          const cls = i>0 ? (r[1] && i===1 ? ' class="old"' : (r[2] && i===2 ? ' class="new-val"' : '')) : '';
+          return `<td${cls}>${c}</td>`;
+        }).join('')}</tr>`).join('')}</tbody>
+      </table>`;
+    }
+    return `<div class="modal-block">
+      <div class="modal-block-title">${b.title}</div>
+      ${inner}
+    </div>`;
+  }).join('<div class="modal-divider"></div>');
+}
+
+function openModal(data, sectionLabel) {
+  const note = fullNotes[data.name];
+  if (!note) return; // no full note yet — fallback is the tooltip
+
+  const overlay = document.getElementById('modal-overlay');
+  const t = data.t;
+
+  // head
+  const mImg = document.getElementById('modal-img');
+  mImg.src = data.img;
+  mImg.onerror = function() { this.src = gemSvg(t.cls, data.name); this.onerror=null; };
+  document.getElementById('modal-name').textContent = data.name.replace(/\n/g,' ');
+  const badge = document.getElementById('modal-badge');
+  badge.textContent = t.lbl;
+  badge.className = `modal-badge ${t.cls}`;
+  document.getElementById('modal-section').textContent = note.section || sectionLabel;
+
+  // body
+  document.getElementById('modal-body').innerHTML =
+    `<div class="modal-block"><div class="modal-block-title">Overview</div><p>${note.summary}</p></div>
+     <div class="modal-divider"></div>` +
+    buildModalBody(note);
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalDirect(); });
+
+/* ── Patch makeItem to be clickable ── */
+const _origMakeItem = makeItem;
+makeItem = function(data, isGen) {
+  const el = _origMakeItem(data, isGen);
+  const hasNote = !!fullNotes[data.name];
+  if (hasNote) {
+    el.style.cursor = 'pointer';
+    el.title = '';           // remove browser tooltip — we have a custom one
+    el.addEventListener('click', () => openModal(data, ''));
+  }
+  return el;
+};
 
 populate('asc-grid', ascendancies);
 populate('gem-grid', gems);
