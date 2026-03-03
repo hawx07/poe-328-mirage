@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Path of Exile 3.28 – Mirage Patchnotes Breakdown</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:       #c9a84c;
+      --gold-light: #f0d480;
+      --gold-dark:  #6e4a14;
+      --gold-mid:   #9a7030;
+      --bg:         #0c0905;
+      --bg2:        #13100a;
+      --buff:       #3dd64a;
+      --nerf:       #e84040;
+      --change:     #e8820a;
+      --new:        #4aacf0;
+      --text:       #c8a87a;
+      --textbright: #edd89e;
+      --textdim:    #7a6040;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(ellipse 80% 40% at 50% 0%, rgba(90,50,8,.35) 0%, transparent 65%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+      color: var(--text);
+      font-family: 'Cinzel', Georgia, serif;
+      min-height: 100vh;
+      padding-bottom: 50px;
+    }
+
+    /* ── HEADER ─────────────────────────── */
+    .hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 12px 28px;
+      background: linear-gradient(180deg, rgba(26,14,4,.98) 0%, rgba(14,9,3,.98) 100%);
+      border-bottom: 2px solid var(--gold-dark);
+      position: sticky; top: 0; z-index: 50;
+    }
+    .hdr-left { display: flex; align-items: center; gap: 16px; }
+    .hdr-logo {
+      width: 68px; height: 68px; border-radius: 50%; flex-shrink: 0;
+      background: radial-gradient(circle at 40% 35%, #3a2408 0%, #0d0804 100%);
+      border: 2px solid var(--gold-dark);
+      box-shadow: 0 0 14px rgba(180,120,30,.45);
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+    }
+    .hdr-logo img { width: 60px; height: 60px; object-fit: contain; }
+    .hdr-title h1 {
+      font-family: 'Cinzel Decorative', 'Cinzel', Georgia, serif;
+      font-size: 1.65rem; font-weight: 700; color: var(--gold-light);
+      letter-spacing: 2px; text-shadow: 0 0 20px rgba(200,160,40,.5);
+    }
+    .hdr-title p { font-size: .7rem; color: var(--gold-mid); letter-spacing: 4px; margin-top: 3px; }
+    .hdr-legend { display: flex; gap: 20px; align-items: center; }
+    .leg { display: flex; align-items: center; gap: 6px; font-size: .77rem; letter-spacing: 1px; color: var(--text); }
+    .leg-icon { font-size: 1rem; }
+    .leg.buff   .leg-icon { color: var(--buff); }
+    .leg.nerf   .leg-icon { color: var(--nerf); }
+    .leg.change .leg-icon { color: var(--change); }
+    .leg.new    .leg-icon { color: var(--new); }
+    .hdr-credits { font-size: .63rem; color: var(--textdim); font-style: italic; text-align: right; line-height: 1.6; }
+
+    /* ── LAYOUT ─────────────────────────── */
+    .main {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 22px 22px 0;
+    }
+    .col-left  { padding-right: 22px; border-right: 1px solid var(--gold-dark); }
+    .col-right { padding-left: 22px; }
+
+    /* ── SECTION ────────────────────────── */
+    .section { margin-bottom: 30px; }
+    .sec-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px;
+    }
+    .sec-icon { font-size: 1.25rem; flex-shrink: 0; }
+    .sec-title {
+      font-size: 1.15rem; font-weight: 700; color: var(--textbright);
+      letter-spacing: 3px; text-transform: uppercase; white-space: nowrap;
+    }
+    .sec-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, var(--gold) 0%, var(--gold-dark) 55%, transparent 100%);
+    }
+    .sec-arrow { color: var(--buff); font-size: .9rem; flex-shrink: 0; }
+
+    /* ── GRID ───────────────────────────── */
+    .items-grid { display: flex; flex-wrap: wrap; gap: 10px 8px; }
+
+    /* ── ITEM ───────────────────────────── */
+    .item {
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      width: 82px; cursor: default; position: relative;
+    }
+    .item-wrap { position: relative; width: 72px; height: 72px; }
+
+    /* change indicator */
+    .ind {
+      position: absolute; top: -8px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 10; font-size: 13px;
+      filter: drop-shadow(0 0 3px currentColor);
+      pointer-events: none;
+    }
+    .ind.buff   { color: var(--buff); }
+    .ind.nerf   { color: var(--nerf); }
+    .ind.change { color: var(--change); }
+    .ind.new    { color: var(--new); }
+
+    /* ornate circular frame */
+    .frame {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: radial-gradient(circle at 42% 38%, #4a3018 0%, #1c1006 55%, #0a0704 100%);
+      box-shadow:
+        0 0 0 1.5px var(--gold-mid),
+        0 0 0 3px #1a1006,
+        0 0 0 5px var(--gold-dark),
+        0 0 14px rgba(180,130,30,.22),
+        inset 0 0 10px rgba(0,0,0,.55);
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+      transition: box-shadow .2s;
+    }
+    .item:hover .frame {
+      box-shadow:
+        0 0 0 1.5px var(--gold-light),
+        0 0 0 3px #1a1006,
+        0 0 0 5px var(--gold),
+        0 0 22px rgba(200,160,40,.5),
+        inset 0 0 10px rgba(0,0,0,.55);
+    }
+    .frame img {
+      width: 60px; height: 60px; object-fit: contain;
+      filter: drop-shadow(0 0 4px rgba(220,180,60,.25));
+      transition: filter .2s;
+    }
+    .item:hover .frame img {
+      filter: drop-shadow(0 0 7px rgba(255,220,80,.5)) brightness(1.1);
+    }
+
+    /* label */
+    .lbl {
+      color: var(--text); font-size: .58rem; font-weight: 600;
+      letter-spacing: .4px; text-align: center; line-height: 1.25;
+      text-transform: uppercase; max-width: 80px; transition: color .2s;
+    }
+    .item:hover .lbl { color: var(--gold-light); }
+
+    /* ── TOOLTIP ────────────────────────── */
+    .tt {
+      display: none; position: absolute;
+      bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+      background: rgba(8,5,2,.97); border: 1px solid var(--gold-dark);
+      color: var(--textbright); padding: 8px 11px; border-radius: 3px;
+      font-size: .68rem; font-family: Georgia, serif;
+      white-space: normal; width: 195px; line-height: 1.45;
+      z-index: 200; pointer-events: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,.75);
+    }
+    .tt-type {
+      font-family: 'Cinzel', sans-serif; font-size: .6rem; font-weight: 700;
+      letter-spacing: 1px; margin-bottom: 4px; display: block;
+    }
+    .tt-type.buff   { color: var(--buff); }
+    .tt-type.nerf   { color: var(--nerf); }
+    .tt-type.change { color: var(--change); }
+    .tt-type.new    { color: var(--new); }
+    .item:hover .tt { display: block; }
+
+    /* ── GENERAL (larger) ───────────────── */
+    .gen .item { width: 108px; }
+    .gen .item-wrap { width: 90px; height: 90px; }
+    .gen .frame { width: 90px; height: 90px; }
+    .gen .frame img { width: 74px; height: 74px; }
+    .gen .ind { font-size: 15px; top: -9px; }
+    .gen .lbl { font-size: .61rem; max-width: 100px; }
+
+    /* ── RESPONSIVE ─────────────────────── */
+    @media (max-width: 960px) {
+      .main { grid-template-columns: 1fr; }
+      .col-left { padding-right: 0; border-right: none; border-bottom: 1px solid var(--gold-dark); padding-bottom: 24px; margin-bottom: 24px; }
+      .col-right { padding-left: 0; }
+    }
+    @media (max-width: 580px) { .hdr-legend { display: none; } }
+
+    /* ════════════════════════════════════════
+       BUILDS SECTION
+    ════════════════════════════════════════ */
+    .builds-section {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 30px 22px 60px;
+      border-top: 2px solid var(--gold-dark);
+      margin-top: 10px;
+    }
+    .builds-header {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 14px;
+      margin-bottom: 26px; padding-bottom: 16px;
+      border-bottom: 1px solid var(--gold-dark);
+    }
+    .builds-icon { font-size: 2rem; }
+    .builds-title-wrap { flex: 1; min-width: 200px; }
+    .builds-title {
+      font-family: 'Cinzel Decorative','Cinzel',Georgia,serif;
+      font-size: 1.4rem; font-weight: 700; color: var(--gold-light);
+      letter-spacing: 2px; text-shadow: 0 0 18px rgba(200,160,40,.4);
+    }
+    .builds-subtitle { font-size: .7rem; color: var(--textdim); letter-spacing: 2px; margin-top: 3px; }
+    .builds-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+    .bbadge {
+      font-size: .6rem; font-weight: 700; letter-spacing: 1px;
+      padding: 3px 8px; border: 1px solid; border-radius: 2px;
+      font-family: 'Cinzel',Georgia,serif;
+    }
+    /* builds grid */
+    .builds-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 18px;
+    }
+    /* individual build card */
+    .bcard {
+      background: linear-gradient(160deg, rgba(28,18,6,.97) 0%, rgba(14,9,3,.97) 100%);
+      border: 1px solid var(--gold-dark);
+      border-radius: 4px;
+      padding: 18px;
+      box-shadow: 0 0 18px rgba(0,0,0,.6), inset 0 0 30px rgba(0,0,0,.3);
+      display: flex; flex-direction: column; gap: 12px;
+      position: relative; overflow: hidden;
+    }
+    .bcard::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .bcard-head { display: flex; gap: 14px; align-items: flex-start; }
+    .bcard-portrait {
+      width: 72px; height: 72px; flex-shrink: 0; border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #3a2208, #0d0804);
+      box-shadow:
+        0 0 0 1.5px var(--gold-mid),
+        0 0 0 3px #1a1006,
+        0 0 0 4.5px var(--gold-dark),
+        0 0 12px rgba(180,130,30,.3);
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+    }
+    .bcard-portrait img { width: 64px; height: 64px; object-fit: cover; border-radius: 50%; }
+    .bcard-meta { flex: 1; }
+    .btag {
+      display: inline-block; font-size: .58rem; font-weight: 700;
+      font-family: 'Cinzel',Georgia,serif; letter-spacing: 1px;
+      padding: 2px 7px; border: 1px solid; border-radius: 2px; margin-bottom: 5px;
+    }
+    .bcard-title {
+      font-size: 1.1rem; font-weight: 700; color: var(--gold-light);
+      letter-spacing: 2px; text-transform: uppercase; line-height: 1.2;
+    }
+    .bcard-sub { font-size: .67rem; color: var(--textdim); letter-spacing: 1px; margin-top: 2px; }
+    .bdiff { display: flex; align-items: center; gap: 3px; margin-top: 6px; }
+    .dot { font-size: .8rem; }
+    .dot.filled { color: var(--gold); }
+    .dot:not(.filled) { color: #2a1c08; }
+    .diff-label { font-size: .54rem; color: var(--textdim); letter-spacing: 1px; margin-left: 5px; }
+    .bcard-skill {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(0,0,0,.3); border: 1px solid rgba(100,70,20,.3);
+      border-radius: 3px; padding: 8px 12px;
+    }
+    .skill-frame {
+      width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #3a2208, #0d0804);
+      box-shadow: 0 0 0 1px var(--gold-dark), 0 0 8px rgba(180,130,30,.2);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .skill-frame img { width: 38px; height: 38px; object-fit: contain; }
+    .skill-label { font-size: .54rem; color: var(--textdim); letter-spacing: 2px; }
+    .skill-name { font-size: .85rem; font-weight: 600; color: var(--textbright); letter-spacing: .5px; margin-top: 1px; }
+    .bteaser {
+      font-size: .74rem; line-height: 1.5; color: var(--text);
+      font-family: Georgia, serif; border-left: 2px solid var(--gold-dark);
+      padding-left: 10px; font-style: italic;
+    }
+    .bdetails { display: none; flex-direction: column; gap: 12px; }
+    .bdetails.open { display: flex; }
+    .bsect { display: flex; flex-direction: column; gap: 5px; }
+    .bsect-title {
+      font-size: .6rem; font-weight: 700; color: var(--gold);
+      letter-spacing: 2px; text-transform: uppercase;
+      padding-bottom: 4px; border-bottom: 1px solid rgba(100,70,20,.4);
+    }
+    .bsect-body { font-size: .72rem; line-height: 1.55; color: var(--text); font-family: Georgia,serif; }
+    .bsect ul { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+    .bsect ul li {
+      font-size: .7rem; color: var(--text); font-family: Georgia,serif;
+      padding-left: 12px; position: relative; line-height: 1.4;
+    }
+    .bsect ul li::before { content: '›'; position: absolute; left: 0; color: var(--gold); }
+    .bpros ul li::before { color: #3dd64a; }
+    .bcons ul li::before { color: #e84040; }
+    .bprosconsrow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .gem-links { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
+    .gem-link {
+      font-size: .62rem; padding: 3px 8px; border: 1px solid;
+      border-radius: 2px; color: var(--textbright); letter-spacing: .5px;
+      background: rgba(0,0,0,.4); font-family: Georgia,serif;
+    }
+    .btoggle {
+      align-self: center; background: none;
+      border: 1px solid var(--gold-dark); color: var(--gold);
+      font-family: 'Cinzel',Georgia,serif; font-size: .63rem; font-weight: 700;
+      letter-spacing: 2px; padding: 7px 22px; cursor: pointer;
+      border-radius: 2px; transition: all .2s; margin-top: 2px;
+    }
+    .btoggle:hover {
+      background: rgba(180,130,30,.12); border-color: var(--gold);
+      color: var(--gold-light); box-shadow: 0 0 12px rgba(180,130,30,.2);
+    }
+    @media (max-width: 600px) {
+      .builds-grid { grid-template-columns: 1fr; }
+      .bprosconsrow { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-left">
+    <div class="hdr-logo">
+      <img src="https://www.poewiki.net/images/b/bd/Path_of_Exile_logo.png"
+           onerror="this.outerHTML='<span style=\'font-size:.45rem;color:#c9a84c;text-align:center;font-weight:700;font-family:Cinzel,serif;padding:4px\'>PATH<br>OF<br>EXILE</span>'"
+           alt="PoE" />
+    </div>
+    <div class="hdr-title">
+      <h1>Path of Exile 3.28</h1>
+      <p>MIRAGE &nbsp;—&nbsp; PATCHNOTES BREAKDOWN</p>
+    </div>
+  </div>
+  <div class="hdr-legend">
+    <div class="leg buff">  <span class="leg-icon">▲</span> BUFF</div>
+    <div class="leg nerf">  <span class="leg-icon">▼</span> NERF</div>
+    <div class="leg change"><span class="leg-icon">●</span> CHANGE</div>
+    <div class="leg new">   <span class="leg-icon">★</span> NEW</div>
+  </div>
+  <div class="hdr-credits">Path of Exile 3.28 — Mirage<br />Community Patchnotes Breakdown</div>
+</header>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="col-left">
+    <div class="section">
+      <div class="sec-header">
+        <span class="sec-icon">⚔</span>
+        <span class="sec-title">Ascendancy Changes</span>
+        <div class="sec-line"></div>
+        <span class="sec-arrow">▲</span>
+      </div>
+      <div class="items-grid" id="asc-grid"></div>
+    </div>
+    <div class="section">
+      <div class="sec-header">
+        <span class="sec-icon">💎</span>
+        <span class="sec-title">Gem Changes</span>
+        <div class="sec-line"></div>
+        <span class="sec-arrow">▲</span>
+      </div>
+      <div class="items-grid" id="gem-grid"></div>
+    </div>
+  </div>
+  <div class="col-right">
+    <div class="section">
+      <div class="sec-header">
+        <span class="sec-icon">⚙</span>
+        <span class="sec-title">General Changes</span>
+        <div class="sec-line"></div>
+        <span class="sec-arrow">▲</span>
+      </div>
+      <div class="items-grid gen" id="gen-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- BUILDS SECTION -->
+<div class="builds-section">
+  <div class="builds-header">
+    <span class="builds-icon">⚔</span>
+    <div class="builds-title-wrap">
+      <h2 class="builds-title">BUILD GUIDES — 3.28 MIRAGE</h2>
+      <p class="builds-subtitle">Meta picks, sleeper OP builds &amp; off-meta gems for Path of Exile: Mirage</p>
+    </div>
+    <div class="builds-badges">
+      <span class="bbadge" style="color:#c9a84c;border-color:#c9a84c">LEAGUE STARTER</span>
+      <span class="bbadge" style="color:#e8820a;border-color:#e8820a">META PICK</span>
+      <span class="bbadge" style="color:#3dd64a;border-color:#3dd64a">🔥 SLEEPER OP</span>
+      <span class="bbadge" style="color:#4aacf0;border-color:#4aacf0">🎯 OFF-META</span>
+      <span class="bbadge" style="color:#9b6fff;border-color:#9b6fff">🆕 NEW ASCENDANCY</span>
+    </div>
+  </div>
+  <div class="builds-grid" id="builds-grid"></div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════
+   SVG GEM ICON GENERATOR (for new/missing gems)
+════════════════════════════════════════════ */
+function gemSvg(type, label) {
+  const palettes = {
+    buff:   { a:'#90f0a0', b:'#1e8a2e', c:'#083a12' },
+    nerf:   { a:'#f09090', b:'#8a1e1e', c:'#3a0808' },
+    change: { a:'#f0b860', b:'#8a5418', c:'#3a2008' },
+    new:    { a:'#70c8f0', b:'#1e5888', c:'#082038' },
+  };
+  const p = palettes[type] || palettes.new;
+  const abbr = (label || '').replace(/\n/g,' ').split(/\s+/).filter(w=>w.length>1).slice(0,2).map(w=>w[0]).join('');
+  const svg = `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="g1" cx="38%" cy="30%" r="58%">
+      <stop offset="0%" stop-color="${p.a}"/>
+      <stop offset="45%" stop-color="${p.b}"/>
+      <stop offset="100%" stop-color="${p.c}"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="33%" cy="28%" r="28%">
+      <stop offset="0%" stop-color="rgba(255,255,255,.4)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient>
+  </defs>
+  <circle cx="32" cy="32" r="27" fill="${p.c}"/>
+  <circle cx="32" cy="32" r="26" fill="url(#g1)"/>
+  <circle cx="32" cy="32" r="26" fill="url(#g2)"/>
+  <polygon points="32,9 50,21 50,43 32,55 14,43 14,21" fill="none" stroke="rgba(255,255,255,.13)" stroke-width="1.5"/>
+  <line x1="32" y1="9" x2="32" y2="55" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+  <line x1="14" y1="21" x2="50" y2="43" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+  <line x1="50" y1="21" x2="14" y2="43" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+  <text x="32" y="37" text-anchor="middle" font-size="14" font-weight="700"
+        font-family="sans-serif" fill="rgba(255,255,255,.75)" letter-spacing="1">${abbr}</text>
+</svg>`;
+  return 'data:image/svg+xml,' + encodeURIComponent(svg);
+}
+
+/* Ascendancy SVG with a person silhouette */
+function ascSvg(type, abbr) {
+  const p = {
+    buff:'#1e6a2e',nerf:'#6a1e1e',change:'#5a4010',new:'#1e4a6a'
+  }[type]||'#2a2010';
+  const svg = `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="ag" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="${p}" stop-opacity=".9"/>
+      <stop offset="100%" stop-color="#0c0904"/>
+    </radialGradient>
+  </defs>
+  <circle cx="32" cy="32" r="27" fill="url(#ag)"/>
+  <circle cx="32" cy="20" r="8" fill="rgba(255,255,255,.18)"/>
+  <path d="M16 54 Q16 38 32 36 Q48 38 48 54Z" fill="rgba(255,255,255,.12)"/>
+  <text x="32" y="58" text-anchor="middle" font-size="10" font-weight="700"
+        font-family="sans-serif" fill="rgba(255,220,100,.8)">${abbr}</text>
+</svg>`;
+  return 'data:image/svg+xml,' + encodeURIComponent(svg);
+}
+
+/* ════════════════════════════════════════════
+   CONFIRMED IMAGE URLs (verified via wiki API)
+════════════════════════════════════════════ */
+const W = 'https://www.poewiki.net/images/';
+
+const IMG = {
+  // Ascendancies
+  chieftain:   W+'a/a2/Chieftain_ascendancy_class.png',
+  guardian:    W+'c/c9/Guardian_ascendancy_class.png',
+  assassin:    W+'2/27/Assassin_ascendancy_class.png',
+  elementalist:W+'b/b2/Elementalist_ascendancy_class.png',
+  saboteur:    W+'7/76/Saboteur_ascendancy_class.png',
+  warden:      W+'d/db/Warden_ascendancy_class.png',
+  scion:       W+'9/92/Scion_avatar.png',
+
+  // Gems – buffed
+  absolution:  W+'c/c6/Absolution_inventory_icon.png',
+  animGuard:   W+'9/97/Animate_Guardian_inventory_icon.png',
+  consPath:    W+'0/04/Consecrated_Path_inventory_icon.png',
+  domBlow:     W+'8/8b/Dominating_Blow_inventory_icon.png',
+  holyFlame:   W+'0/0e/Holy_Flame_Totem_inventory_icon.png',
+  penBrand:    W+'8/82/Penance_Brand_inventory_icon.png',
+  purFlame:    W+'1/19/Purifying_Flame_inventory_icon.png',
+  raiseSpec:   W+'0/0b/Raise_Spectre_inventory_icon.png',
+  stormBrand:  W+'7/7e/Storm_Brand_inventory_icon.png',
+  holyRelic:   W+'8/8e/Summon_Holy_Relic_inventory_icon.png',
+  thunderstorm:W+'1/10/Thunderstorm_inventory_icon.png',
+
+  // Gems – nerfed
+  penDissip:   W+'f/f6/Penance_Brand_of_Dissipation_inventory_icon.png',
+  detDead:     W+'3/31/Detonate_Dead_inventory_icon.png',
+  earthshatter:W+'9/9c/Earthshatter_inventory_icon.png',
+  staticStrike:W+'0/05/Static_Strike_inventory_icon.png',
+  viperStrike: W+'4/4c/Viper_Strike_inventory_icon.png',
+
+  // Gems – changed
+  orbStorms:   W+'8/84/Orb_of_Storms_inventory_icon.png',
+  portal:      W+'d/d3/Portal_%28skill_gem%29_inventory_icon.png',
+  stormBurst:  W+'0/0a/Storm_Burst_inventory_icon.png',
+  winterOrb:   W+'9/91/Winter_Orb_inventory_icon.png',
+
+  // Gems – new (rework/transfigured)
+  holySweep:   W+'7/78/Holy_Sweep_inventory_icon.png',
+  shockTotem:  W+'e/eb/Shockwave_Totem_inventory_icon.png',
+  chargedDash: W+'a/a9/Charged_Dash_inventory_icon.png',
+  shockNova:   W+'2/2c/Shock_Nova_inventory_icon.png',
+  flameTrap:   W+'5/57/Flamethrower_Trap_inventory_icon.png',
+  kinFusillade:W+'f/fe/Kinetic_Fusillade_inventory_icon.png',
+
+  // Currency / General
+  exaltedOrb:  W+'2/26/Exalted_Orb_inventory_icon.png',
+  awakenedEmp: W+'2/23/Awakened_Empower_Support_inventory_icon.png',
+  orbChance:   W+'8/86/Orb_of_Chance_inventory_icon.png',
+  orbRegret:   W+'a/a8/Orb_of_Regret_inventory_icon.png',
+  orbFusing:   W+'6/62/Orb_of_Fusing_inventory_icon.png',
+  harbOrb:     W+'0/0a/Harbinger%27s_Orb_inventory_icon.png',
+  scarab:      W+'e/e5/Scarab_of_Stability_inventory_icon.png',
+  chisel:      W+'5/55/Cartographer%27s_Chisel_inventory_icon.png',
+  engOrb:      W+'a/a7/Engineer%27s_Orb_inventory_icon.png',
+  dominOrb:    W+'c/c2/Orb_of_Dominance_inventory_icon.png',
+};
+
+/* ════════════════════════════════════════════
+   DATA
+════════════════════════════════════════════ */
+const T = {
+  buff:  { cls:'buff',   ind:'▲', lbl:'BUFF' },
+  nerf:  { cls:'nerf',   ind:'▼', lbl:'NERF' },
+  chg:   { cls:'change', ind:'●', lbl:'CHANGE' },
+  new:   { cls:'new',    ind:'★', lbl:'NEW' },
+};
+
+const ascendancies = [
+  { name:'SCION\n(RELIQUARIAN)', t:T.new,  img: ascSvg('new','RL'),       tip:'New Scion ascendancy: borrows powerful modifiers from unique items. New option alongside Ascendant. Rotates unique options per league.' },
+  { name:'CHIEFTAIN',            t:T.nerf, img: IMG.chieftain,             tip:'Hinekora, Death\'s Fury: explosion chance raised to 10% (was 5%), but explosion damage reduced to 250% of max life (was 500%). Net nerf.' },
+  { name:'ASSASSIN',             t:T.buff, img: IMG.assassin,              tip:'Opportunistic: now grants Damage cannot be Reflected (was only Damage from Critical Strikes). Big defensive upgrade.' },
+  { name:'ELEMENTALIST',         t:T.nerf, img: IMG.elementalist,          tip:'Liege of the Primordial: removed 50% increased Effect of Buffs granted by your Golems. Significant golem buff nerf.' },
+  { name:'WARDEN',               t:T.buff, img: IMG.warden,                tip:'Avatar of the Wilds: 100% more Elemental Damage while Unbound (was 80%). Lesson of the Seasons: improved flat damage reduction per Bark.' },
+  { name:'SABOTEUR',             t:T.buff, img: IMG.saboteur,              tip:'Like Clockwork: 50% cooldown recovery rate (was 40%). Calculated Risk: enemy damage is now Unlucky. Perfect Crime: 30% less triggered spell damage (was 35%).' },
+  { name:'GUARDIAN',             t:T.chg,  img: IMG.guardian,              tip:'Major rework: Sentinel of Radiance is now permanent (no more duration). New Marshal of Divinity notable. Time of Need now removes all ailments & curses.' },
+];
+
+const gems = [
+  /* ── NEW SKILLS (3.28) ── */
+  { name:'HOLY\nHAMMERS',   t:T.new,  img: gemSvg('new','HH'),       tip:'New Str/Int skill: Slam the ground calling down cascading Holy Hammers. Expend Power Charges to create additional hammers on each side.' },
+  { name:'HOLY\nSTRIKE',    t:T.new,  img: gemSvg('new','HS'),        tip:'New Str/Int skill: Imbue your weapon, summoning undamageable Holy Armaments with copied weapon stats that attack your targets.' },
+  { name:'DIVINE\nBLAST',   t:T.new,  img: gemSvg('new','DB'),        tip:'New Str/Int skill: Project a beam of holy light from your shield creating an implosion, followed by a larger explosion.' },
+  { name:'SHIELD OF\nLIGHT',t:T.new,  img: gemSvg('new','SL'),        tip:'New Str/Int skill: Repel hits with a wave from your shield. Blocked hits trigger a light wave that allies can echo outward in a cone.' },
+  { name:'HOLY SWEEP\n(REWORK)', t:T.chg, img: IMG.holySweep,         tip:'Rework of Sweep: Two-handed mace/staff circular swing calling down Holy Hammers that cannot be evaded.' },
+
+  /* ── BUFFS ── */
+  { name:'ABSOLUTION',            t:T.buff, img:IMG.absolution,   tip:'Base debuff duration 3s (was 1s). Minion duration 15s (was 10s). Sentinels gain 44% more Area of Effect.' },
+  { name:'ANIMATE\nGUARDIAN',     t:T.buff, img:IMG.animGuard,    tip:'Animate Guardian of Smiting: minion damage doubled, impact radius increased significantly.' },
+  { name:'CONSECRATED\nPATH',     t:T.buff, img:IMG.consPath,     tip:'Damage effectiveness boosted. Quality now provides more damage to closer targets.' },
+  { name:'DOMINATING\nBLOW',      t:T.buff, img:IMG.domBlow,      tip:'Now also summons sentinels when you kill rare enemies. Duration extended.' },
+  { name:'HOLY FLAME\nTOTEM',     t:T.buff, img:IMG.holyFlame,    tip:'Now fires 3–6 projectiles based on gem level (was always 3). Significant DPS increase.' },
+  { name:'PENANCE\nBRAND',        t:T.buff, img:IMG.penBrand,     tip:'10% more damage. Effectiveness of added damage raised to 520–630% (was 470–570%).' },
+  { name:'PURIFYING\nFLAME',      t:T.buff, img:IMG.purFlame,     tip:'Mana cost reduced. Shockwave now deals 150% more damage (was 110%).' },
+  { name:'RAISE\nSPECTRE',        t:T.buff, img:IMG.raiseSpec,    tip:'Improved scaling at gem levels past 20. Better late-game minion build viability.' },
+  { name:'STORM\nBRAND',          t:T.buff, img:IMG.stormBrand,   tip:'Massive damage increase: effectiveness raised from ~30% to 45–55%.' },
+  { name:'SUMMON\nHOLY RELIC',    t:T.buff, img:IMG.holyRelic,    tip:'Relic nova regeneration increased. Improved healing sustain during combat.' },
+  { name:'THUNDER-\nSTORM',       t:T.buff, img:IMG.thunderstorm, tip:'Explosion damage increased to 300%. Significant single-hit damage buff.' },
+
+  /* ── NERFS ── */
+  { name:'PENANCE BRAND\nOF DISSIPATION', t:T.nerf, img:IMG.penDissip,    tip:'Significant damage nerf to compensate for the regular Penance Brand buff. Reduced effectiveness.' },
+  { name:'DETONATE DEAD\nOF SCAVENGING',  t:T.nerf, img:IMG.detDead,      tip:'70% less ailment damage (was 60%). Ailment ignite builds hit hard.' },
+  { name:'EARTH-\nSHATTER',               t:T.nerf, img:IMG.earthshatter, tip:'Effectiveness of Added Damage reduced from 393% to 329% at gem level 20.' },
+  { name:'STATIC\nSTRIKE',                t:T.nerf, img:IMG.staticStrike, tip:'Beam damage reduced. Adjusted downward from previous values.' },
+  { name:'VIPER STRIKE\nOF MAMBA',        t:T.nerf, img:IMG.viperStrike,  tip:'Attack speed penalty applied when dual wielding. Reduces dual-wield synergy.' },
+
+  /* ── CHANGES ── */
+  { name:'ORB OF\nSTORMS', t:T.chg, img:IMG.orbStorms,   tip:'Now supports Spell Echo. Enables new support gem interactions with orb skills.' },
+  { name:'PORTAL',          t:T.chg, img:IMG.portal,       tip:'No longer interrupted by self-inflicted damage. Quality of life fix.' },
+  { name:'STORM\nBURST',   t:T.chg, img:IMG.stormBurst,   tip:'Orb placement timing adjusted. Storm Burst of Repulsion is a new transfigured variant.' },
+  { name:'WINTER\nORB',    t:T.chg, img:IMG.winterOrb,    tip:'Projectile speed now affects impact timing. Changes optimal playstyle.' },
+
+  /* ── NEW TRANSFIGURED ── */
+  { name:'SHOCKWAVE TOTEM\nOF AUTHORITY',         t:T.new, img:IMG.shockTotem,   tip:'New transfigured: Totems use their shockwave nova at your location instead of their own position.' },
+  { name:'STATIC STRIKE OF\nGATHERING LIGHTNING', t:T.new, img:IMG.staticStrike, tip:'New transfigured variant of Static Strike with enhanced lightning gathering mechanics.' },
+  { name:'CHARGED DASH\nOF PROJECTION',           t:T.new, img:IMG.chargedDash,  tip:'New transfigured variant of Charged Dash with projection-based mechanics.' },
+  { name:'ORB OF STORMS\nOF SQUALLS',             t:T.new, img:IMG.orbStorms,    tip:'New transfigured: Electrical orb that teleports to random enemies struck, splitting to more targets.' },
+  { name:'STORM BURST\nOF REPULSION',             t:T.new, img:IMG.stormBurst,   tip:'New transfigured: Channel orbs that jump from targeted area and explode with increased scale on release.' },
+  { name:'SHOCK NOVA\nOF PROCESSION',             t:T.new, img:IMG.shockNova,    tip:'New transfigured: Multiple lightning rings offset towards target, each dealing area lightning damage.' },
+  { name:'FLAMETHROWER TRAP\nOF STABILITY',       t:T.new, img:IMG.flameTrap,    tip:'New transfigured variant of Flamethrower Trap with improved stability mechanics.' },
+  { name:'KINETIC FUSILLADE\nOF DETONATION',      t:T.new, img:IMG.kinFusillade, tip:'New transfigured variant of Kinetic Fusillade with detonation chaining mechanics.' },
+];
+
+const general = [
+  { name:'GROUND\nLOOT BUFF',       t:T.buff, img:IMG.exaltedOrb,  tip:'Currency items now represent a significantly larger portion of all drops. Exalted & Regal Orbs comparatively more common. Non-unique equipment ~6% less common.' },
+  { name:'EXCEPTIONAL\nSUPPORT GEMS', t:T.new, img:IMG.awakenedEmp, tip:'40+ new Exceptional Support Gems completely replace the Awakened Gem system. These gems fundamentally transform how skills operate, not just boost numbers.' },
+  { name:'INT / ES\nNERF',           t:T.nerf, img:gemSvg('nerf','ES'), tip:'Intelligence now grants 1% maximum Energy Shield per 10 points (was per 5 points). Massive nerf to Intelligence-stacking and ES-based builds.' },
+  { name:'RELIQUARIAN\nNEW ASCEND.', t:T.new,  img:IMG.scion,       tip:'New Scion-exclusive ascendancy: Reliquarian. Borrows powerful modifiers that already exist on unique items. The pool of options rotates each league.' },
+  { name:'ATLAS\nREWORK',            t:T.chg,  img:IMG.dominOrb,    tip:'Maps fully decoupled from areas — players now select layouts via Map Device separately. New Arcane Astrolabes create zone-wide modifiers. 25 maps added, 24 removed from pool.' },
+  { name:'NIGHTMARE\nMAPS',          t:T.new,  img:gemSvg('new','NM'), tip:'Tier 17 maps become Nightmare Maps. Three new memory threads: Loneliness, Trauma, Reverence. Each completed Nightmare map grants 1 Atlas skill point.' },
+  { name:'HARBINGER\nREMOVED',       t:T.chg,  img:IMG.harbOrb,     tip:'Harbinger removed as core mechanic. Fracturing & Ancient Orbs remain as core drops. Harbinger Orbs become non-functional. Harbinger Scarabs convert to Veiled Scarabs.' },
+  { name:'KEEPERS OF\nFLAME CORE',   t:T.chg,  img:IMG.engOrb,      tip:'Keepers of the Flame goes permanently core. Breach Hives spawn from Act 6 onwards. Flesh of Xesht currency converts breach uniques. New atlas keystones added.' },
+  { name:'GENESIS TREE\nNERF',       t:T.nerf, img:IMG.orbFusing,   tip:'Genesis Tree will no longer reliably generate extremely good gear. Significant nerf to the Keepers of the Flame gear generation loop.' },
+  { name:'HOLY GEM\nSYSTEM',         t:T.new,  img:IMG.holySweep,   tip:'Entirely new Holy skill category: Holy Hammers, Holy Strike, Divine Blast, Shield of Light, Holy Sweep. New Templar class starting skills.' },
+  { name:'SETTLERS\nADJUSTED',       t:T.chg,  img:gemSvg('change','SA'), tip:'Smelting speed doubled (at higher gold cost). Farmer wages reduced 50%. Mapper wages increased 25%. New Mota Aro port. Favoured resources rerollable for 15,000 gold.' },
+  { name:'SCARAB\nOVERHAUL',         t:T.chg,  img:IMG.scarab,      tip:'6 new scarab types added. Bisection Scarab split into Sinistral (prefix focus) and Dextral (suffix focus). Multiple quantity increases across the board.' },
+  { name:'CHISELS\nREWORKED',        t:T.chg,  img:IMG.chisel,      tip:'Chisels always provide +20% quality now. Quality effects reduced: 20% quality grants +10% item quantity on maps (was +20%). Cartographer Strongbox quality modifier removed.' },
+  { name:'UNIQUE ITEM\nUPGRADES',    t:T.new,  img:IMG.orbChance,   tip:'New Coin of Restoration currency enables Fated Unique-style upgrades. Example: Fleshrender upgrades to Skysunder. Adds progression path for specific uniques.' },
+  { name:'CURRENCY\nDROP BUFF',      t:T.buff, img:IMG.orbRegret,   tip:'Ores & bars in Settlers now return currency items. Crops return equipment. Port destinations grant specific tattoos and runegrafts by destination type.' },
+  { name:'ATLAS PASSIVE\nCHANGES',   t:T.chg,  img:IMG.dominOrb,   tip:'New passives: Paths Not Taken (divination cards from other maps), Synthesised Stability, Overloaded Circuits (+5 random map notables). Several old passives removed.' },
+];
+
+/* ════════════════════════════════════════════
+   RENDER
+════════════════════════════════════════════ */
+function makeItem(data, isGen) {
+  const t = data.t;
+  const displayName = data.name.replace(/\n/g,'<br>');
+
+  const wrap = document.createElement('div');
+  wrap.className = 'item';
+
+  const iw = document.createElement('div');
+  iw.className = 'item-wrap';
+
+  const ind = document.createElement('span');
+  ind.className = `ind ${t.cls}`;
+  ind.textContent = t.ind;
+
+  const frame = document.createElement('div');
+  frame.className = 'frame';
+
+  const img = document.createElement('img');
+  img.src = data.img;
+  img.alt = data.name.replace(/\n/g,' ');
+  // fallback: replace broken img with gem SVG
+  img.onerror = function() {
+    this.src = gemSvg(t.cls, data.name);
+    this.onerror = null;
+  };
+
+  const lbl = document.createElement('div');
+  lbl.className = 'lbl';
+  lbl.innerHTML = displayName;
+
+  const tt = document.createElement('div');
+  tt.className = 'tt';
+  tt.innerHTML = `<span class="tt-type ${t.cls}">${t.lbl}</span>${data.tip}`;
+
+  frame.appendChild(img);
+  iw.appendChild(ind);
+  iw.appendChild(frame);
+  wrap.appendChild(iw);
+  wrap.appendChild(lbl);
+  wrap.appendChild(tt);
+  return wrap;
+}
+
+function populate(id, items) {
+  const grid = document.getElementById(id);
+  const isGen = id === 'gen-grid';
+  items.forEach(item => grid.appendChild(makeItem(item, isGen)));
+}
+
+populate('asc-grid', ascendancies);
+populate('gem-grid', gems);
+populate('gen-grid', general);
+
+/* ════════════════════════════════════════════
+   BUILDS SECTION
+════════════════════════════════════════════ */
+
+const builds = [
+  /* ───── META PICKS ───── */
+  {
+    tag:'LEAGUE STARTER', tagCls:'starter',
+    name:'HOLY ABSOLUTION',
+    sub:'Guardian — Templar',
+    ascImg: IMG.guardian,
+    skillImg: IMG.absolution,
+    skillName:'Vaal Absolution',
+    diff:2,
+    teaser:'Double-buffed in 3.28 — both the skill AND the Guardian ascendancy received major upgrades simultaneously. One of the strongest beginner builds this league.',
+    why:'Absolution base debuff duration tripled (1s→3s). Sentinels now last 15s (was 10s) and gained 44% more AoE. Guardian\'s Sentinel of Radiance is now permanent with no duration, and Time of Need removes ALL ailments & curses every 4 seconds.',
+    playstyle:'Cast Absolution on packs to summon lightning Sentinels. Minions do all the work — you buff them, curse enemies, and reposition with Convocation. Scales effortlessly from acts to Uber bosses. Swap to Doryani\'s Prototype for endgame.',
+    pros:['Available from level 12 with no gear requirements','Budget to endgame in the same ascendancy','New permanent Sentinel of Radiance passive companion','Minions are nearly unkillable with the new Guardian nodes','Zero reflect risk (minions deal the damage)'],
+    cons:['Minion pathing can be inconsistent in tight spaces','Doryani\'s Prototype swap requires careful resistance management','Less hands-on — some players find it boring'],
+    gemLinks:['Vaal Absolution','Minion Damage','Physical to Lightning','Spell Echo','Critical Strike','Cruelty Support'],
+    keyItems:['Any +minion damage wand/staff (starter)','Doryani\'s Prototype (endgame)','Glorious Vanity (Xibaqua) for Divine Flesh','Watcher\'s Eye (Hatred/Wrath mods)'],
+  },
+  {
+    tag:'LEAGUE STARTER', tagCls:'starter',
+    name:'BLEED BOW',
+    sub:'Gladiator — Duelist',
+    ascImg: 'https://www.poewiki.net/images/1/12/Gladiator_ascendancy_class.png',
+    skillImg: IMG.viperStrike,
+    skillName:'Split Arrow + Puncture',
+    diff:2,
+    teaser:'Resolute Technique ensures 100% hit rate — no crit needed, no variance. Double-lucky block makes you nearly immortal. Unaffected by the INT/ES nerf.',
+    why:'Completely bypasses the 3.28 INT/ES nerf with a pure life/bleed build. Ensnaring Arrow forces enemies to always "move," multiplying bleed damage. Gladiator\'s Gratuitous Violence proliferates bleeds for screen-clearing power.',
+    playstyle:'Map with Split Arrow + chain bleeds via Gratuitous Violence. Boss phases swap to Puncture for stacked bleed. Maintain Ensnaring Arrow on bosses so they always count as moving (3× bleed damage multiplier). Extremely tanky via 87% block with Glancing Blows.',
+    pros:['Zero crit — fully consistent from day one','Best-in-slot defensive layer (87% block)','Reflect immune — Gladiator Gratuitous Violence handles it','Excellent SSF starter, needs no specific uniques','Strong boss DPS through stacked Puncture bleeds'],
+    cons:['Slower mapper than mine/totem builds','Requires Ensnaring Arrow management on bosses','Scales poorly past ~10ex without diminishing returns','Cannot run Elemental Reflect map mod safely'],
+    gemLinks:['Puncture','Brutality','Vicious Projectiles','Deadly Ailments','Swift Affliction','Unbound Ailments'],
+    keyItems:['High physical damage bow with elder mods','Haemophilia gloves (bleed DoT multi)','Ryslatha\'s Coil belt','Ensnaring Arrow (utility link)'],
+  },
+  {
+    tag:'META PICK', tagCls:'meta',
+    name:'HOLY HAMMER SLAMMER',
+    sub:'Inquisitor — Templar',
+    ascImg: 'https://www.poewiki.net/images/f/f0/Inquisitor_ascendancy_class.png',
+    skillImg: gemSvg('new','HH'),
+    skillName:'Holy Hammers (New 3.28)',
+    diff:3,
+    teaser:'Brand new 3.28 skill with minimal guide saturation. Cascading holy hammers chain from enemy to enemy. Power Charges create extra hammer flanks for devastating single-target DPS spikes.',
+    why:'Entirely new skill means low player saturation. Inquisitor\'s Righteous Providence + Inevitable Judgement provides free penetration against all enemies. The hammer cascade mechanic clears full packs with one slam while Power Charge consumption handles bosses.',
+    playstyle:'Slam forward to drop a Holy Hammer. On hit it cascades to adjacent enemies chain-style. Before boss fights, build 3+ Power Charges (via Static Strike), then consume them on Holy Hammers to call extra flanking hammers. Rallying Cry before big hits for warcry damage boost.',
+    pros:['Brand new skill — almost nobody playing it in week 1','Excellent clear AND single-target in one skill','Massive life regen from Inquisitor\'s Sanctuary keystone','Physical→Lightning conversion enables shock proliferation','Satisfying cascade hit-feel'],
+    cons:['Level with Sunder until maps — Holy Hammers needs Cluster Jewels first','"Fuel the Fight" Large Cluster is mandatory — build fails without it','Animation cancel with Frostblink required for best mapping speed','Intermediate skill floor'],
+    gemLinks:['Holy Hammers','Brutality','Melee Physical Damage','Fortify','Close Combat','Pulverise'],
+    keyItems:['"Fuel the Fight" Large Cluster Jewel (mandatory)','Two-handed axe with max phys damage range','Medium Cluster with Mob Mentality','Amulet with Disciple of the Forbidden anoint'],
+  },
+
+  /* ───── SLEEPER / OFF-META ───── */
+  {
+    tag:'🔥 SLEEPER OP', tagCls:'sleeper',
+    name:'STORM BRAND ASSASSIN',
+    sub:'Assassin — Shadow',
+    ascImg: IMG.assassin,
+    skillImg: IMG.stormBrand,
+    skillName:'Storm Brand',
+    diff:3,
+    teaser:'Two MASSIVE overlooked buffs: Storm Brand gained 80% more damage against branded enemies, AND Assassin now has FULL reflect immunity (not just crit strikes). Most players still think this build is dead.',
+    why:'3.28 buffed Storm Brand effectiveness from ~30% to 45–55% — an enormous damage increase. Simultaneously, Assassin\'s Opportunistic now grants "Damage Cannot be Reflected" (previously only critical strike damage was immune). The one historical fatal weakness of Storm Brand Assassin is completely gone.',
+    playstyle:'Attach brands to enemies — each brand repeatedly pulses lightning damage passively while you move. Void Battery x2 provides insane Power Charge–based crit multiplier. Brands persist through Breach and Delirium transitions. Full reflect immunity means zero dangerous map mods.',
+    pros:['Two separate 3.28 buffs that almost nobody noticed','Full Elemental Reflect immunity — no more death by reflect','Brands are "set and forget" — attach and keep moving','Delirium/Breach specialist: brands persist through events','Very satisfying passive damage style'],
+    cons:['Void Battery setup costs 100+ chaos each early league','80% buff only applies while brand is actually attached','Boss re-attach required after detach phases','Storm Brand has a bad reputation — most guides are outdated'],
+    gemLinks:['Storm Brand','Awakened Added Lightning Damage','Controlled Destruction','Intensify','Energy Leech','Inspiration'],
+    keyItems:['Void Battery x2 (BiS — doubles crit and spell damage)','Badge of the Brotherhood (Power→Frenzy conversion)','Shaper helm with Brands Increased Damage implicit','Watcher\'s Eye (Wrath: lightning penetration)'],
+  },
+  {
+    tag:'🎯 OFF-META', tagCls:'offmeta',
+    name:'KINETIC FUSILLADE WARDEN',
+    sub:'Warden — Ranger',
+    ascImg: IMG.warden,
+    skillImg: IMG.kinFusillade,
+    skillName:'Kinetic Fusillade',
+    diff:4,
+    teaser:'Avatar of the Wilds buffed from 80%→100% more Elemental Damage while Unbound. Combined with Oath of Winter for permafreeze, this is one of the highest-ceiling non-meta bow builds in 3.28.',
+    why:'The 80%→100% Avatar of the Wilds buff is an 11% more multiplier increase to peak damage. Oath of Winter + Unbound Avatar stacks = everything in maps is permafrozen. Nothing dangerous can hit you if it\'s frozen. Tinctures replace flasks and cannot be flask-disabled by map mods.',
+    playstyle:'Build Unbound Avatar stacks via elemental ailments, trigger Unbound for 100% more Elemental Damage window. Fire Kinetic Fusillade "gatling gun" bursts during Unbound window for massive DPS. Oath of Winter provides near-permafreeze on everything. Bosses get obliterated in Unbound + Tincture + Sigil of Power windows.',
+    pros:['Avatar 80%→100% is a direct 11% more multiplier on peak damage','Permafreeze via Oath of Winter — best defensive layer in the game','Tinctures cannot be flask-disabled by map mods','Warden has fewer players = fewer guides = less competition for BiS items','Both great clear and single-target in one setup'],
+    cons:['Attack speed vs. skill duration balance is complex to optimize','Hard counters: Elemental Reflect, 70%+ Ailment Avoidance, Leech Immunity','Suffix pressure limits gear flexibility','Requires understanding of Unbound window timing — high skill floor'],
+    gemLinks:['Kinetic Fusillade','Added Cold Damage','Inspiration','Elemental Damage with Attacks','Hypothermia','Ice Bite'],
+    keyItems:['Kinetic wand with flat lightning/cold damage + attack speed','Timeclasp (reduces Skill Effect Duration — critical)','Warped Timepiece (seek LOW attack speed rolls)','Prismatic Tincture with elemental penetration'],
+  },
+  {
+    tag:'🔥 SLEEPER OP', tagCls:'sleeper',
+    name:'PYROCLAST MINE SABOTEUR',
+    sub:'Saboteur — Shadow',
+    ascImg: IMG.saboteur,
+    skillImg: gemSvg('change','PM'),
+    skillName:'Pyroclast Mine',
+    diff:2,
+    teaser:'Both Saboteur buffs directly improve this exact build\'s core mechanics. Underplayed because players assume Saboteur is a "trap" ascendancy. Budget-friendly with "unethical boss damage" at low investment.',
+    why:'Like Clockwork CDR improved from 40%→50% means the mine detonation cooldown cycles faster. Perfect Crime reduced penalty from 35%→30% less triggered spell damage — nets to ~10% more damage in practice. Ghost Dance + evasion + Born in the Shadows blind = extremely hard to die from hits.',
+    playstyle:'Throw Pyroclast fire mines, detonate chains. Born in the Shadows blinds nearby enemies on detonation. Pyromaniac grants life regen per mine kill — near-immortal versus trash packs. On bosses, layer 3–5 mine detonation waves for massive burst. Tremor Rod doubles detonation chains.',
+    pros:['Both 3.28 Saboteur buffs directly apply to this build','Ghost Dance + evasion + blind = best mitigation for hits','Budget: Tremor Rod is cheap and doubles boss DPS','Reflect immune inherently','Only 2 truly dangerous map mods (no regen + reduced recovery)'],
+    cons:['Not the fastest mapper — no chain-clearing explosions','Manual detonation timing required for optimal boss damage','Incremental not transformative buffs','Already a good build — not a surprise first-week pick'],
+    gemLinks:['Pyroclast Mine','Minefield','Swift Assembly','Controlled Destruction','Fire Penetration','Combustion'],
+    keyItems:['Tremor Rod (double detonation chains — mandatory)','Blightwell flask (chaos res + mine damage)','Cluster Jewels: mine throwing speed + Blast Cascade','Mine detonation speed enchant on helmet'],
+  },
+  {
+    tag:'🆕 NEW ASCENDANCY', tagCls:'new',
+    name:'RELIQUARIAN PYRO MINE',
+    sub:'Reliquarian — Scion',
+    ascImg: IMG.scion,
+    skillImg: gemSvg('new','RP'),
+    skillName:'Pyroclast Mine',
+    diff:4,
+    teaser:'The brand new 3.28 Scion ascendancy. Get the effects of Astral Projector + Victario\'s Influence WITHOUT equipping them — freeing two major gear slots for raw stat optimization. Time-limited: this combination only exists in Mirage league.',
+    why:'Reliquarian borrows unique item effects without equipping those items. Astral Projector (ring) repositions nova spells to your cursor — you equip a stat-stick ring instead. Victario\'s Influence (chest) grants +2 aura gem levels — you equip a rare chest instead. Astramentis node gives +60 ALL attributes, replacing an entire attribute-stacking item.',
+    playstyle:'Choose 3 unique item effects via Reliquarian passives. Run Pyroclast Mine with Astral Projector effect for cursor-targeted nova mines. Use the freed ring + chest slots for pure DPS/defense rare gear. Astramentis passive handles all attribute requirements without wearing the amulet.',
+    pros:['Two major equipment slots freed (ring + chest) for rare gear optimization','Three unique item effects simultaneously — unprecedented in PoE history','Mirage-league exclusive combination — time-limited power','Very high boss damage ceiling from layered mine detonations','Astramentis passive covers all attribute requirements'],
+    cons:['Requires understanding which Reliquarian nodes are available this league','Scion leveling is weak before ascendancy unlocks','The "freed slot" advantage requires actively building around it','Very new — minimal documentation and guides available'],
+    gemLinks:['Pyroclast Mine','Minefield','Combustion','Controlled Destruction','Swift Assembly','Fire Penetration'],
+    keyItems:['Reliquarian nodes: Astral Projector + Victario\'s Influence + Astramentis','Rare rings (you get Astral Projector effect free)','Rare chest (you get Victario\'s Influence effect free)','Stat-optimized helmet with mine speed enchant'],
+  },
+  {
+    tag:'🎯 OFF-META', tagCls:'offmeta',
+    name:'GLACIAL CASCADE MINER',
+    sub:'Elementalist — Witch',
+    ascImg: IMG.elementalist,
+    skillImg: IMG.stormBurst,
+    skillName:'Glacial Cascade of the Fissure',
+    diff:2,
+    teaser:'A perpetually reliable build that the 3.28 patch left untouched. Autotargeting fissure chains demolish entire screens. 10M DPS at league start, 100M DPS ceiling with gear.',
+    why:'Glacial Cascade of the Fissure mines autotarget enemies through fissure chains — effectively one-button mapping. Elementalist provides Shaper of Ices (freeze), Shaper of Storms (shock), and passive node damage bonuses. The build wasn\'t nerfed in 3.28 while many ES-stacking alternatives got hit hard.',
+    playstyle:'Throw 3–5 mines and detonate. The fissure chains handle all targeting automatically — packs explode without aiming. Elementalist provides free free elemental ailment scaling. Bosses die to layered mine detonation waves. SSF viable with found gear.',
+    pros:['10M DPS achievable at league start with minimal investment','100M DPS ceiling with proper gear investment','SSF viable from day one — no specific uniques needed','Autotargeting fissure = effortless one-button mapping','Not nerfed in 3.28 while ES alternatives took hits'],
+    cons:['Mine playstyle not for everyone — throw/detonate rhythm','No major buffs in 3.28, just maintained strength','Cooldown management required for optimal boss damage','Can feel repetitive over long sessions'],
+    gemLinks:['Glacial Cascade of the Fissure','Minefield','Controlled Destruction','Hypothermia','Swift Assembly','Added Cold Damage'],
+    keyItems:['Tremor Rod (double mine detonation — huge boss DPS)','Heatshiver (early: cold→fire for resist coverage)','Void Battery wands (endgame crit scaling)','Cluster Jewels: mine throwing speed + damage'],
+  },
+];
+
+/* ─── Build Render ─── */
+function diffDots(n) {
+  return Array.from({length:5}, (_,i) =>
+    `<span class="dot ${i<n?'filled':''}">${i<n?'●':'○'}</span>`
+  ).join('');
+}
+
+function renderBuild(b) {
+  const tagColors = {
+    starter:'#c9a84c', meta:'#e8820a', sleeper:'#3dd64a', offmeta:'#4aacf0', new:'#9b6fff'
+  };
+  const col = tagColors[b.tagCls] || '#c8a87a';
+
+  const gemColors = ['#ff6060','#6090ff','#60cc60','#d4b060','#d060d0','#60d4d4'];
+  const gemHtml = b.gemLinks.map((g,i) =>
+    `<span class="gem-link" style="border-color:${gemColors[i%gemColors.length]}">${g}</span>`
+  ).join('');
+
+  const prosHtml = b.pros.map(p=>`<li>${p}</li>`).join('');
+  const consHtml = b.cons.map(c=>`<li>${c}</li>`).join('');
+  const itemsHtml = b.keyItems.map(k=>`<li>${k}</li>`).join('');
+
+  return `
+  <div class="bcard">
+    <div class="bcard-head">
+      <div class="bcard-portrait">
+        <img src="${b.ascImg}" alt="${b.sub}"
+             onerror="this.src='${ascSvg(b.tagCls==='sleeper'?'buff':b.tagCls==='starter'?'buff':b.tagCls==='meta'?'change':'new', b.sub.substring(0,2).toUpperCase())}'; this.onerror=null;" />
+      </div>
+      <div class="bcard-meta">
+        <div class="btag" style="color:${col};border-color:${col}">${b.tag}</div>
+        <div class="bcard-title">${b.name}</div>
+        <div class="bcard-sub">${b.sub}</div>
+        <div class="bdiff">${diffDots(b.diff)}<span class="diff-label">DIFFICULTY</span></div>
+      </div>
+    </div>
+
+    <div class="bcard-skill">
+      <div class="skill-frame">
+        <img src="${b.skillImg}" alt="${b.skillName}"
+             onerror="this.src='${gemSvg('new',b.skillName)}'; this.onerror=null;" />
+      </div>
+      <div class="skill-info">
+        <div class="skill-label">MAIN SKILL</div>
+        <div class="skill-name">${b.skillName}</div>
+      </div>
+    </div>
+
+    <p class="bteaser">${b.teaser}</p>
+
+    <div class="bdetails">
+      <div class="bsect">
+        <div class="bsect-title">⚡ WHY IT'S STRONG IN 3.28</div>
+        <p class="bsect-body">${b.why}</p>
+      </div>
+      <div class="bsect">
+        <div class="bsect-title">🗡 PLAYSTYLE</div>
+        <p class="bsect-body">${b.playstyle}</p>
+      </div>
+      <div class="bprosconsrow">
+        <div class="bpros">
+          <div class="bsect-title" style="color:#3dd64a">✔ PROS</div>
+          <ul>${prosHtml}</ul>
+        </div>
+        <div class="bcons">
+          <div class="bsect-title" style="color:#e84040">✘ CONS</div>
+          <ul>${consHtml}</ul>
+        </div>
+      </div>
+      <div class="bsect">
+        <div class="bsect-title">💎 GEM LINKS (6L)</div>
+        <div class="gem-links">${gemHtml}</div>
+      </div>
+      <div class="bsect">
+        <div class="bsect-title">🔑 KEY ITEMS</div>
+        <ul>${itemsHtml}</ul>
+      </div>
+    </div>
+
+    <button class="btoggle" onclick="toggleBuild(this)">SHOW DETAILS ▼</button>
+  </div>`;
+}
+
+function toggleBuild(btn) {
+  const details = btn.previousElementSibling;
+  const open = details.classList.toggle('open');
+  btn.textContent = open ? 'HIDE DETAILS ▲' : 'SHOW DETAILS ▼';
+}
+
+document.getElementById('builds-grid').innerHTML = builds.map(renderBuild).join('');
+</script>
+</body>
+</html>
